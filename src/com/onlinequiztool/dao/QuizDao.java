@@ -1,27 +1,14 @@
 package com.onlinequiztool.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.onlinequiztool.controller.QuizController;
 
-public class QuizDao {
-	public static final Connection getConnection() throws SQLException {
-	    Connection connection = null;
-	    
-	 	try {
-	 	   connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/database", "root", "@Rajkumar2805");
-	 	} catch (SQLException exception) {
-	 	   System.out.println(exception);
-	 	}   
-	 	return connection;
-    }
-	
-	public void adminSignUpInserted(final String name, final String email, final String password) {
+public class QuizDao extends DataBaseConnection {
+	public void adminSignUpValidation(final String name, final String email, final String password) {
 		
 		try (Connection connection = getConnection();
 			final Statement statement = connection.createStatement();) {
@@ -42,7 +29,7 @@ public class QuizDao {
 		}
 	}
 	
-	public void userSignUpInserted(final String name, final String email, final String password) {
+	public void userSignUpValidation(final String name, final String email, final String password) {
 		
 		try (final Connection connection = getConnection();
 			final Statement statement = connection.createStatement();) {
@@ -73,7 +60,7 @@ public class QuizDao {
 			while (resultSet.next()) {
 				System.out.println("SignIn succesfully");
 				isSignIn = false;
-				QuizController.adminSignInSuccess();
+				QuizController.adminCrudOperations();
 			}
 			
 			if (isSignIn) {
@@ -94,51 +81,34 @@ public class QuizDao {
 			while (resultSet.next()) {
 				System.out.println("SignIn succesfully");
 				isSignIn = false;
-				
 			}
 			
 			if (isSignIn) {
 				System.out.println("signin failed");
 			}
-			
 		} catch (Exception exception) {
 	        System.out.println(exception);
 		}
 	}
 	
-	public void firstRoundInserted(int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
-	    String sqlQuery = "insert into first_round_table values(?,?,?,?,?,?,?)";
+	public void firstRoundInserted(final int questionNumber, final String questions, final String firstOption, final String secondOption, final String thirdOption, final String fourthOption, final String correctAnswer) {
+	    final String sqlQuery = "insert into first_round_table values(?,?,?,?,?,?,?)";
 	    QuizDao.prepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
 	}
 	
-	public void secondRoundInserted(int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
-	    String sqlQuery = "insert into second_round_table values(?,?,?,?,?,?,?)";
+	public void secondRoundInserted(final int questionNumber, final String questions, final String firstOption, final String secondOption, final String thirdOption, final String fourthOption, final String correctAnswer) {
+	    final String sqlQuery = "insert into second_round_table values(?,?,?,?,?,?,?)";
 	    QuizDao.prepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
 	}
 	
-	public void thirdRoundInserted(int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
-	    String sqlQuery = "insert into third_round_table values(?,?,?,?,?,?,?)";
+	public void thirdRoundInserted(final int questionNumber, final String questions, final String firstOption, final String secondOption, final String thirdOption, final String fourthOption, final String correctAnswer) {
+	    final String sqlQuery = "insert into third_round_table values(?,?,?,?,?,?,?)";
 	    QuizDao.prepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
 	}
 	
-	public void firstRoundUpdated(int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
-		String sqlQuery = "Update first_round_table SET questions = ?, firstOption = ?, secondOption = ?, thirdOption = ?, fourthOption = ?, correctAnswer = ? WHERE questionNumber = ?";
-		QuizDao.updatePrepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-	}
-	
-    public void secondRoundUpdated(int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
-		String sqlQuery = "Update second_round_table SET questions = ?, firstOption = ?, secondOption = ?, thirdOption = ?, fourthOption = ?, correctAnswer = ? WHERE questionNumber = ?";
-		QuizDao.updatePrepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-	}
-    
-    public void thirdRoundUpdated(int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
-		String sqlQuery = "Update third_round_table SET questions = ?, firstOption = ?, secondOption = ?, thirdOption = ?, fourthOption = ?, correctAnswer = ? WHERE questionNumber = ?";
-		QuizDao.updatePrepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-	}
-	
-    public static void prepareStatement(String sqlQuery, int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
+	public static void prepareStatement(final String sqlQuery, final int questionNumber, final String questions, final String firstOption, final String secondOption, final String thirdOption, final String fourthOption, final String correctAnswer) {
 		try (final Connection connection = getConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+			final PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
 			
 			prepareStatement.setInt(1, questionNumber);
 			prepareStatement.setString(2, questions);
@@ -154,9 +124,24 @@ public class QuizDao {
 		}
 	}
 	
-	public static void updatePrepareStatement(String sqlQuery, int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
+    public void firstRoundUpdated(final int questionNumber, final String questions, final String firstOption, final String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
+		final String sqlQuery = "Update first_round_table SET questions = ?, firstOption = ?, secondOption = ?, thirdOption = ?, fourthOption = ?, correctAnswer = ? WHERE questionNumber = ?";
+		QuizDao.updatePrepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
+	}
+	
+    public void secondRoundUpdated(final int questionNumber, final String questions, final String firstOption, final String secondOption, final String thirdOption, final String fourthOption, final String correctAnswer) {
+		final String sqlQuery = "Update second_round_table SET questions = ?, firstOption = ?, secondOption = ?, thirdOption = ?, fourthOption = ?, correctAnswer = ? WHERE questionNumber = ?";
+		QuizDao.updatePrepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
+	}
+    
+    public void thirdRoundUpdated(final int questionNumber, final String questions, final String firstOption, final String secondOption, final String thirdOption, final String fourthOption, final String correctAnswer) {
+		final String sqlQuery = "Update third_round_table SET questions = ?, firstOption = ?, secondOption = ?, thirdOption = ?, fourthOption = ?, correctAnswer = ? WHERE questionNumber = ?";
+		QuizDao.updatePrepareStatement(sqlQuery, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
+	}
+    
+	public static void updatePrepareStatement(String sqlQuery, final int questionNumber, final String questions, final String firstOption, final String secondOption, final String thirdOption, final String fourthOption, final String correctAnswer) {
 		try (final Connection connection = getConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+		    final PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
 		    
 			prepareStatement.setString(1, questions);
 			prepareStatement.setString(2, firstOption);
@@ -169,6 +154,34 @@ public class QuizDao {
 			prepareStatement.executeUpdate();
 		} catch (Exception exception) {
 			System.out.println(exception);
+		}
+	}
+	
+	public void firstRoundDeleted(final int questionNumber) {
+		final String sqlQuery = "Delete from first_round_table where questionNumber = ?";
+		QuizDao.deletePrepareStatement(sqlQuery, questionNumber);
+	}
+	
+    public void secondRoundDeleted(final int questionNumber) {
+    	final String sqlQuery = "Delete from second_round_table where questionNumber = ?";
+		QuizDao.deletePrepareStatement(sqlQuery, questionNumber);
+	}
+    
+    public void thirdRoundDeleted(final int questionNumber) {
+    	final String sqlQuery = "Delete from third_round_table where questionNumber = ?";
+		QuizDao.deletePrepareStatement(sqlQuery, questionNumber);
+	}
+    
+    private static void deletePrepareStatement(final String sqlQuery, int questionNumber) {
+		
+    	try (final Connection connection = getConnection();
+			final PreparedStatement prePareStatement = connection.prepareStatement(sqlQuery);) {
+    		
+    		prePareStatement.setInt(1, questionNumber);
+    		
+    		prePareStatement.executeUpdate();
+		} catch(Exception e) {
+			System.out.println(e);
 		}
 	}
 }

@@ -3,7 +3,7 @@ package com.onlinequiztool.main;
 import java.util.Scanner;
 
 import com.onlinequiztool.controller.QuizController;
-import com.onlinequiztool.view.Details;
+import com.onlinequiztool.view.ViewPage;
 
 public class OnlineQuizTool {
 	public static final Scanner SCANNER = new Scanner(System.in);
@@ -27,16 +27,16 @@ public class OnlineQuizTool {
     }
 	
     public static void signUp(int choice) {
-		final String name = Details.getName();
-		final String email = Details.getEmail();
-	    final String password = Details.getPassword();
+		final String name = ViewPage.getName();
+		final String email = ViewPage.getEmail();
+	    final String password = ViewPage.getPassword();
 	    
 	    QuizController.signUpController(choice, name, email, password);
 	}
 	
 	public static void signIn(int choice) {
-		final String email = Details.getEmail();
-		final String password = Details.getPassword();
+		final String email = ViewPage.getEmail();
+		final String password = ViewPage.getPassword();
 		
 		QuizController.signInController(choice, email, password);
 	}
@@ -48,13 +48,13 @@ public class OnlineQuizTool {
 	    
 	    switch(choice) {
 	    case 1:
-	    	AdminPage.insertQuestion(choice);
+	    	AdminPage.insertQuestionTable(choice);
 	    	break;
 	    case 2:
-	    	AdminPage.insertQuestion(choice);
+	    	AdminPage.insertQuestionTable(choice);
 	    	break;
 	    case 3:
-	    	AdminPage.deleteQuestion();
+	    	AdminPage.deleteQuestionTable();
 	    	break;
 	    case 4:
 	    	SCANNER.close();

@@ -1,7 +1,7 @@
 package com.onlinequiztool.main;
 
 import com.onlinequiztool.controller.QuizController;
-import com.onlinequiztool.view.Details;
+import com.onlinequiztool.view.ViewPage;
 
 public class AdminPage {
 	public void admin(int choice) {
@@ -15,20 +15,20 @@ public class AdminPage {
 		}
     }
 	
-	public static void insertQuestion(final int choice) {
-		final int questionNumber = Details.getQuestionNumber();
-		final String questions = Details.getQuestions();
-		final String firstOption = Details.getFirstOption();
-		final String secondOption = Details.getSecondOption();
-		final String thirdOption = Details.getThirdOption();
-		final String fourthOption = Details.getFourthtOption();
-		final String correctAnswer = Details.getCorrectAnswer();
+	public static void insertQuestionTable(final int choice) {
+		final int questionNumber = ViewPage.getQuestionNumber();
+		final String questions = ViewPage.getQuestions();
+		final String firstOption = ViewPage.getFirstOption();
+		final String secondOption = ViewPage.getSecondOption();
+		final String thirdOption = ViewPage.getThirdOption();
+		final String fourthOption = ViewPage.getFourthtOption();
+		final String correctAnswer = ViewPage.getCorrectAnswer();
 		
 		QuizController.questionInsertController(choice, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer );
 	}
 	
-	public static void deleteQuestion() {
-		final int questionNumber = Details.getQuestionNumber();
+	public static void deleteQuestionTable() {
+		final int questionNumber = ViewPage.getQuestionNumber();
 		
 		QuizController.questionDeleteController(questionNumber);
 	}

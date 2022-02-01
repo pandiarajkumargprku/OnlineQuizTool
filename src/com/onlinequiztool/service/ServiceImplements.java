@@ -38,9 +38,9 @@ public class ServiceImplements implements Service {
 	public void signUpDataInsert(final int choice, final String name, final String email, final String password) {
 		
 		if(choice == 1) {
-			QUIZDAO.adminSignUpInserted(name, email, password);
+			QUIZDAO.adminSignUpValidation(name, email, password);
 		} else if(choice == 2) {
-			QUIZDAO.userSignUpInserted(name, email, password);
+			QUIZDAO.userSignUpValidation(name, email, password);
 		}
 	}
 	
@@ -57,7 +57,7 @@ public class ServiceImplements implements Service {
     	
     	if(choice == 1) {
     		System.out.println("Which round to you inserted ?");
-    		int roundNumber = OnlineQuizTool.SCANNER.nextInt();
+    		final int roundNumber = OnlineQuizTool.SCANNER.nextInt();
     		
     	    if(roundNumber == 1) {
     	    	QUIZDAO.firstRoundInserted(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
@@ -68,7 +68,7 @@ public class ServiceImplements implements Service {
     	    }
     	} else if(choice == 2) {
     		System.out.println("which round to you updated ?");
-    		int roundNumber = OnlineQuizTool.SCANNER.nextInt();
+    		final int roundNumber = OnlineQuizTool.SCANNER.nextInt();
     		
     		if(roundNumber ==1) {
     			QUIZDAO.firstRoundUpdated(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
@@ -82,10 +82,14 @@ public class ServiceImplements implements Service {
     
     public void questionDeleteService(int questionNumber) {
     	System.out.println("which round to ypu delete ?");
-    	int roundNumber = OnlineQuizTool.SCANNER.nextInt();
+    	final int roundNumber = OnlineQuizTool.SCANNER.nextInt();
     	
     	if(roundNumber == 1) {
-    		
+    		QUIZDAO.firstRoundDeleted(questionNumber);
+    	} else if(roundNumber == 2) {
+    		QUIZDAO.secondRoundDeleted(questionNumber);
+    	} else if(roundNumber == 3) {
+    		QUIZDAO.thirdRoundDeleted(questionNumber);
     	}
     }
 }
