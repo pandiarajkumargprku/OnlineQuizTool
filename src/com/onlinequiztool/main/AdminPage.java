@@ -1,34 +1,66 @@
 package com.onlinequiztool.main;
 
 import com.onlinequiztool.controller.QuizController;
-import com.onlinequiztool.view.Details;
+import com.onlinequiztool.model.Quiz;
+import com.onlinequiztool.view.ViewPage;
 
+/**
+ * <h1>Admin class</h1>
+ * @author PandiarajkumarG
+ *
+ */
 public class AdminPage {
-	public void admin(int choice) {
+	/**
+	 * validate New Admin or not.
+	 * 
+	 * @param choice
+	 */
+	public void admin(final int choice) {
 		System.out.println("Are you new Admin ?");
 		final String isNewAdmin = OnlineQuizTool.SCANNER.next();
 		
-		if("yes".equalsIgnoreCase(isNewAdmin)) {
+		if ("yes".equalsIgnoreCase(isNewAdmin)) {
 			OnlineQuizTool.signUp(choice);
-		} else if("no".equalsIgnoreCase(isNewAdmin)) {
+		} else if ("no".equalsIgnoreCase(isNewAdmin)) {
 		    OnlineQuizTool.signIn(choice);
+		} else {
+			admin(choice);
 		}
     }
 	
-	public static void insertQuestion(final int choice) {
-		final int questionNumber = Details.getQuestionNumber();
-		final String questions = Details.getQuestions();
-		final String firstOption = Details.getFirstOption();
-		final String secondOption = Details.getSecondOption();
-		final String thirdOption = Details.getThirdOption();
-		final String fourthOption = Details.getFourthtOption();
-		final String correctAnswer = Details.getCorrectAnswer();
+	/**
+	 * insert in the question into database
+	 *   
+	 * @param choice
+	 */
+    public static void insertQuestion(final int choice) {
+		final int questionNumber = ViewPage.getQuestionNumber();
+		final String questions = ViewPage.getQuestions();
+		final String firstOption = ViewPage.getFirstOption();
+		final String secondOption = ViewPage.getSecondOption();
+		final String thirdOption = ViewPage.getThirdOption();
+		final String fourthOption = ViewPage.getFourthOption();
+		final String correctAnswer = ViewPage.getCorrectAnswer();
+		Quiz QuizTools = new Quiz(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
 		
-		QuizController.questionInsertController(choice, questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer );
+		QuizController.questionInsertController(choice, QuizTools);
+	}
+    
+    /**
+     * update in the question into database
+     * 
+     * @param choice
+     */
+	public static void updateQuestion(final int choice) {
+	    AdminPage.insertQuestion(choice);
 	}
 	
+	/**
+	 * delete in the question into database
+	 * 
+	 */
 	public static void deleteQuestion() {
-		final int questionNumber = Details.getQuestionNumber();
+		final int questionNumber = ViewPage.getQuestionNumber();
 		
 		QuizController.questionDeleteController(questionNumber);
 	}

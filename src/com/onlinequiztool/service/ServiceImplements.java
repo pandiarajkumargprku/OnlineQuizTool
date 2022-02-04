@@ -3,21 +3,37 @@ package com.onlinequiztool.service;
 import com.onlinequiztool.controller.QuizController;
 import com.onlinequiztool.dao.QuizDao;
 import com.onlinequiztool.main.OnlineQuizTool;
+import com.onlinequiztool.model.Quiz;
 
-
+/**
+ * <h1>ServiceImplementation</h1>
+ * 
+ * @author PandiarajkumarG
+ *
+ */
 public class ServiceImplements implements Service {
-    public static final QuizDao QUIZDAO = new QuizDao();
+    private final QuizDao QUIZ_DAO = new QuizDao();
     
+    /**
+     * Validate the name
+     * 
+     * @param name
+     */
 	public String checkName(final String name) {
 		
-		if(!name.matches("^[A-Z]{1}[A-Za-z\s]{1,}$")) {
+		if (!name.matches("[A-Z][a-zA-Z\\s]*$")) {
 			System.out.println("Invalid Name");
 			return QuizController.getName();
 		}
 		return name;
 	}
-
-	public String checkEmail(final String email) {
+	
+	/**
+	 * Validate the email
+	 * 
+	 * @param email
+	 */
+    public String checkEmail(final String email) {
 		
 		if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
 			System.out.println("Inavlid EmailId");
@@ -26,66 +42,124 @@ public class ServiceImplements implements Service {
 		return email;
 	}
 
+    /**
+     * Validate password
+     * 
+     * @param password
+     */
 	public String checkPassword(final String password) {
 		
-		if(!password.matches("((?=\\S+$)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,15})")) {
+		if (!password.matches("((?=\\S+$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%]).{6,15})")) {
 			System.out.println("Invalid Password");
 			return QuizController.getPassword();
 		}
 		return password;
 	}
 	
-	public void signUpDataInsert(final int choice, final String name, final String email, final String password) {
+	/**
+	 * Validate SignUp Admin or User
+	 * 
+	 * @param choice
+	 * @param name
+	 * @param email
+	 * @param password
+	 */
+	public void signUpValidation(final int choice, final String name, final String email, final String password) {
 		
-		if(choice == 1) {
-			QUIZDAO.adminSignUpInserted(name, email, password);
+		if (choice == 1) {
+			String adminEmailValidate = QUIZ_DAO.adminSignUpTableValidation(email);
+			if (adminEmailValidate != null) {
+				System.out.println("This Mail Id is alredy Exists");
+			} else {
+				QUIZ_DAO.adminSignUpDataInsert(name, email, password);
+			}
 		} else if(choice == 2) {
-			QUIZDAO.userSignUpInserted(name, email, password);
+			String userEmailValidate = QUIZ_DAO.userSignUpTableValidation(email);
+			if (userEmailValidate != null ) {
+				System.out.println("This Mail Id is already Exists");
+			} else {
+				QUIZ_DAO.userSignUpDataInsert(name, email, password);
+			}
 		}
 	}
 	
-    public void signInDataInsert(final int choice, final String email, final String password) {
-		
-    	if(choice == 1) {
-    		QUIZDAO.adminSignInInserted(email, password);
-    	} else if(choice == 2) {
-    		QUIZDAO.userSignInInserted(email, password);
+	/**
+	 * Validate SignIn Admin or User
+	 * 
+	 * @param choice
+	 * @param email
+	 * @param password
+	 */
+    public void signInValidation(final int choice, final String email, final String password) {
+    	
+    	if (choice == 1) {
+    		boolean isSignIn =QUIZ_DAO.adminSignInValidation(email, password);
+    		
+    		if (isSignIn) {
+    			System.out.println("Admin SignIn Successfully");
+    			QuizController.adminServices();
+    		} else {
+    			System.out.println("SignIn Failed");
+    		}
+    	} else if (choice == 2) {
+    		boolean isSignIn = QUIZ_DAO.userSignInValidation(email, password);
+    		
+    		if (isSignIn) {
+    			System.out.println("User signIn Successfully");
+    		} else {
+    			System.out.println("SignIn Failed");
+    		}
     	}
 	}
     
-    public void questionInsertService(int choice, int questionNumber, String questions, String firstOption, String secondOption, String thirdOption, String fourthOption, String correctAnswer) {
+    /**
+     * insert and update question into the database
+     * 
+     * @param choice
+     * @param quizTools
+     */
+    public void questionInsertService(final int choice, Quiz quizTools) {
     	
-    	if(choice == 1) {
+    	if (choice == 1) {
     		System.out.println("Which round to you inserted ?");
-    		int roundNumber = OnlineQuizTool.SCANNER.nextInt();
+    		final int roundNumber = OnlineQuizTool.SCANNER.nextInt();
     		
-    	    if(roundNumber == 1) {
-    	    	QUIZDAO.firstRoundInserted(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-    	    } else if(roundNumber == 2)	{
-    			QUIZDAO.secondRoundInserted(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-    	    } else if(roundNumber == 3) {
-    			QUIZDAO.thirdRoundInserted(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
+    	    if (roundNumber == 1) {
+    	    	QUIZ_DAO.firstRoundInserted(quizTools);
+    	    } else if (roundNumber == 2) {
+    	    	QUIZ_DAO.secondRoundInserted(quizTools);
+    	    } else if (roundNumber == 3) {
+    	    	QUIZ_DAO.thirdRoundInserted(quizTools);
     	    }
-    	} else if(choice == 2) {
+    	} else if (choice == 2) {
     		System.out.println("which round to you updated ?");
-    		int roundNumber = OnlineQuizTool.SCANNER.nextInt();
+    		final int roundNumber = OnlineQuizTool.SCANNER.nextInt();
     		
-    		if(roundNumber ==1) {
-    			QUIZDAO.firstRoundUpdated(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-    		} else if(choice ==2) {
-    			QUIZDAO.secondRoundUpdated(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-    		} else if(roundNumber == 3) {
-    			QUIZDAO.thirdRoundUpdated(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
+    		if (roundNumber ==1) {
+    			QUIZ_DAO.firstRoundUpdated(quizTools);
+    		} else if (choice ==2) {
+    			QUIZ_DAO.secondRoundUpdated(quizTools);
+    		} else if (roundNumber == 3) {
+    			QUIZ_DAO.thirdRoundUpdated(quizTools);
     		}
     	}
     }
     
-    public void questionDeleteService(int questionNumber) {
-    	System.out.println("which round to ypu delete ?");
-    	int roundNumber = OnlineQuizTool.SCANNER.nextInt();
+    /**
+     * delete the question into the database
+     * 
+     * @param questionNumber
+     */
+    public void questionDeleteService(final int questionNumber) {
+    	System.out.println("which round to you delete ?");
+    	final int roundNumber = OnlineQuizTool.SCANNER.nextInt();
     	
-    	if(roundNumber == 1) {
-    		
+    	if (roundNumber == 1) {
+    		QUIZ_DAO.firstRoundDeleted(questionNumber);
+    	} else if (roundNumber == 2) {
+    		QUIZ_DAO.secondRoundDeleted(questionNumber);
+    	} else if (roundNumber == 3) {
+    		QUIZ_DAO.thirdRoundDeleted(questionNumber);
     	}
     }
 }
