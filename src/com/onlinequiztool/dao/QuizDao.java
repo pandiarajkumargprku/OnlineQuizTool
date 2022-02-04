@@ -20,7 +20,7 @@ public class QuizDao {
 	 * @param email
 	 * @return
 	 */
-	public String adminSignUpTableValidation(final String email) {
+public String adminSignUpTableValidation(final String email) {
 		String adminEmailValidate = null;
 		
 		try (Connection connection = DataBaseConnection.getConnection();
