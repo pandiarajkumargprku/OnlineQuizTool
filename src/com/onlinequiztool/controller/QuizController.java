@@ -1,18 +1,27 @@
 package com.onlinequiztool.controller;
 
+import java.util.ArrayList;
+
+import com.onlinequiztool.customexception.CustomException.AccessFailedException;
+import com.onlinequiztool.customexception.CustomException.mailIdNotFoundException;
+import com.onlinequiztool.dao.QuizDaoServiceImplements;
+import com.onlinequiztool.dao.QuizServiceDao;
 import com.onlinequiztool.main.OnlineQuizTool;
 import com.onlinequiztool.model.Quiz;
-import com.onlinequiztool.service.Service;
-import com.onlinequiztool.service.ServiceImplements;
+import com.onlinequiztool.service.QuizService;
+import com.onlinequiztool.service.QuizServiceImplements;
 import com.onlinequiztool.view.ViewPage;
 
 /**
- * <h1>QuizController</h1> The QuizController all the request and response the Controller
+ * <h1>QuizController</h1> 
+ * <p>
+ * </p>
+ * 
  * @author PandiarajkumarG
- *
  */
 public class QuizController {
-    private static final Service QUIZ_SERVICE = new ServiceImplements();
+    private static final QuizService QUIZ_SERVICE = new QuizServiceImplements();
+    private static final QuizServiceDao QUIZ_DAO_SERVICE = new QuizDaoServiceImplements();
    
    	public static String checkName(final String name) {
 	   return QUIZ_SERVICE.checkName(name);
@@ -26,11 +35,11 @@ public class QuizController {
 		return QUIZ_SERVICE.checkPassword(password);
 	}
 	
-	public static void signUpTableInsert(final int choice, final String name, final String email, final String password) {
+	public static void signUpTableInsert(final int choice, final String name, final String email, final String password) throws mailIdNotFoundException {
 		QUIZ_SERVICE.signUpValidation(choice, name, email, password);
 	}
 	
-	public static void signInTableInsert(final int choice, final String email, final String password) {
+	public static void signInTableInsert(final int choice, final String email, final String password) throws AccessFailedException {
 		QUIZ_SERVICE.signInValidation(choice, email, password);
 	}
 	
@@ -50,11 +59,23 @@ public class QuizController {
 		OnlineQuizTool.adminServices();
 	}
 	
-	public static void questionInsertController(final int choice, Quiz QuizTools) {
-		QUIZ_SERVICE.questionInsertService(choice, QuizTools);
+	public static void questionInsert(final int choice, Quiz QuizTools) {
+		QUIZ_DAO_SERVICE.questionInsert(choice, QuizTools);
 	}
 	
-	public static void questionDeleteController(final int questionNumber) {
-		QUIZ_SERVICE.questionDeleteService(questionNumber);
+	public static void questionDelete(final int questionNumber) {
+		QUIZ_DAO_SERVICE.questionDelete(questionNumber);
+	}
+
+	public static void userServices(String email) throws AccessFailedException {
+		ViewPage.userServices(email);
+	}
+
+	public static ArrayList getRoundDetails(int level) throws AccessFailedException {
+		return QUIZ_DAO_SERVICE.getRoundDetails(level);
+	}
+
+	public static boolean markInsert(int mark, String email) {
+		return QUIZ_DAO_SERVICE.markInsert(mark, email);
 	}
 }

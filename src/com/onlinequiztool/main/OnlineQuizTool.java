@@ -3,26 +3,35 @@ package com.onlinequiztool.main;
 import java.util.Scanner;
 
 import com.onlinequiztool.controller.QuizController;
+import com.onlinequiztool.customexception.CustomException.AccessFailedException;
+import com.onlinequiztool.customexception.CustomException.mailIdNotFoundException;
 import com.onlinequiztool.view.ViewPage;
 
 /**
- * <h1>OnlineQuizTool</h1> The onlineQuizTool Application in which admin
- * maintains the questions for quiz so that user can signUp and signIn to take
- * three level online Quiz.
+ * <h1>OnlineQuizTool</h1> 
+ * <p>
+ *    The onlineQuizTool Application in which admin
+ *    maintains the questions for quiz so that user can signUp and signIn to take
+ *    three level online Quiz. 
+ * </p>
  * 
  *  @author PandiarajkumarG
  */
 public class OnlineQuizTool {
 	public static final Scanner SCANNER = new Scanner(System.in);
-	private static final AdminPage ADMIN_PAGE = new AdminPage();
+	public static final AdminPage ADMIN_PAGE = new AdminPage();
 	private static final UserPage USER_PAGE = new UserPage();
 
+	public static void main(String[] args) throws mailIdNotFoundException, AccessFailedException {
+		OnlineQuizTool.checkAdminOrUser();
+	}
+	
 	/**
-	 * main method is validate admin or user .
-	 * 
-	 * @param args
+	 * method check admin or user.
+	 * @throws mailIdNotFoundException 
+	 * @throws AccessFailedException 
 	 */
-	public static void main(String[] args) {
+	private static void checkAdminOrUser () throws mailIdNotFoundException, AccessFailedException {
 		System.out.println("Choose 1.Admin 2.User");
 		final int choice = SCANNER.nextInt();
 
@@ -34,7 +43,8 @@ public class OnlineQuizTool {
 			USER_PAGE.user(choice);
 			break;
 		default:
-			SCANNER.close();
+			System.out.println("Enter valid number");
+			checkAdminOrUser();
 		}
 	}
 
@@ -42,8 +52,9 @@ public class OnlineQuizTool {
 	 * Method which makes SignUp function
 	 * 
 	 * @param choice
+	 * @throws mailIdNotFoundException 
 	 */
-	public static void signUp(final int choice) {
+	public static void signUp(final int choice) throws mailIdNotFoundException {
 		final String name = ViewPage.getName();
 		final String email = ViewPage.getEmail();
 		final String password = ViewPage.getPassword();
@@ -55,8 +66,9 @@ public class OnlineQuizTool {
 	 * Method which makes SignIn function
 	 * 
 	 * @param choice
+	 * @throws AccessFailedException 
 	 */
-	public static void signIn(final int choice) {
+	public static void signIn(final int choice) throws AccessFailedException {
 		final String email = ViewPage.getEmail();
 		final String password = ViewPage.getPassword();
 

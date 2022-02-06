@@ -20,6 +20,10 @@ public class Quiz {
 		this.fourthOption = fourthOption;
 		this.correctAnswer = correctAnswer;
 	}
+    
+    public Quiz() {
+    	
+    }
 
 	public int getQuestionNumber() {
 		return questionNumber;
@@ -75,5 +79,10 @@ public class Quiz {
 
 	public void setCorrectAnswer(String correctAnswer) {
 		this.correctAnswer = correctAnswer;
+	}
+
+	@Override
+	public String toString() {	
+		return String.format("%s%s%s%s%s%s%s", questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
 	}
 }

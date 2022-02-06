@@ -1,4 +1,8 @@
 package com.onlinequiztool.main;
+
+import com.onlinequiztool.customexception.CustomException.AccessFailedException;
+import com.onlinequiztool.customexception.CustomException.mailIdNotFoundException;
+
 /**
  * <h1>User class</h1>
  * 
@@ -6,11 +10,15 @@ package com.onlinequiztool.main;
  *
  */
 public class UserPage {
+	
 	/**
-	 * validate user or not
+	 * User Validation
+	 * 
 	 * @param choice
+	 * @throws mailIdNotFoundException 
+	 * @throws AccessFailedException 
 	 */
-	public void user(final int choice) {
+	public void user(final int choice) throws mailIdNotFoundException, AccessFailedException {
 	    System.out.println("Are you new User ?");
 		final String isNewUser = OnlineQuizTool.SCANNER.next();
 		

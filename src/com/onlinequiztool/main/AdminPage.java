@@ -1,21 +1,25 @@
 package com.onlinequiztool.main;
 
 import com.onlinequiztool.controller.QuizController;
+import com.onlinequiztool.customexception.CustomException.AccessFailedException;
+import com.onlinequiztool.customexception.CustomException.mailIdNotFoundException;
 import com.onlinequiztool.model.Quiz;
 import com.onlinequiztool.view.ViewPage;
 
 /**
  * <h1>Admin class</h1>
+ * 
  * @author PandiarajkumarG
- *
  */
 public class AdminPage {
 	/**
 	 * validate New Admin or not.
 	 * 
 	 * @param choice
+	 * @throws mailIdNotFoundException 
+	 * @throws AccessFailedException 
 	 */
-	public void admin(final int choice) {
+	public void admin(final int choice) throws mailIdNotFoundException, AccessFailedException {
 		System.out.println("Are you new Admin ?");
 		final String isNewAdmin = OnlineQuizTool.SCANNER.next();
 		
@@ -43,7 +47,7 @@ public class AdminPage {
 		final String correctAnswer = ViewPage.getCorrectAnswer();
 		Quiz QuizTools = new Quiz(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
 		
-		QuizController.questionInsertController(choice, QuizTools);
+		QuizController.questionInsert(choice, QuizTools);
 	}
     
     /**
@@ -62,6 +66,6 @@ public class AdminPage {
 	public static void deleteQuestion() {
 		final int questionNumber = ViewPage.getQuestionNumber();
 		
-		QuizController.questionDeleteController(questionNumber);
+		QuizController.questionDelete(questionNumber);
 	}
 }
