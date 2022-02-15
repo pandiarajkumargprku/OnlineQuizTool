@@ -32,7 +32,7 @@ public class UserView {
 		} else if ("no".equalsIgnoreCase(isNewUser)) {
 			QuizDetail.signIn(choice);
 		} else {
-			LOGGER.info("Enter Yes or No only");
+			LOGGER.warn("Enter Yes or No only");
 			user(choice);
 		}
 	}
@@ -80,9 +80,10 @@ public class UserView {
 		if (!isPass) {
 			LOGGER.info("your score is below average");
 			LOGGER.info("Do you Want to COntinue");
-			getIsContinue();
+			checkContinue();
 		} else if (isPass) {
 			level = level+1;
+			
 			if (level <= lastLevel) {
 				levelDetails(mark, level, email);
 			} else {
@@ -95,14 +96,14 @@ public class UserView {
 	 * Continue or not
 	 * 
 	 */
-	private static void getIsContinue() {
+	private static void checkContinue() {
 		LOGGER.info("Do You Want to continue");
 		String isContinue = OnlineQuizTool.SCANNER.nextLine();
 		
 		if ("yes".equalsIgnoreCase(isContinue)) {
 			OnlineQuizTool.checkAdminOrUser();
 		} else if ("no".equalsIgnoreCase(isContinue)) {
-			LOGGER.info("...");
+			LOGGER.info("Thank You for Attend the Quiz");
 		}
 	}
 
@@ -118,7 +119,7 @@ public class UserView {
 		if (isMarkUpdated) {
 			LOGGER.info("Your mark was Updated Successfully");
 		} else {
-			LOGGER.info("Check your EMail");
+			LOGGER.warn("Check your EMail");
 		}
 	}
 }

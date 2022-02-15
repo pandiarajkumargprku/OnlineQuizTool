@@ -29,7 +29,7 @@ public class AdminView {
 		} else if ("no".equalsIgnoreCase(isNewAdmin)) {
 			QuizDetail.signIn(choice);
 		} else {
-			System.out.println("Enter Yes or No only");
+			LOGGER.warn("Enter Yes or No only");
 			admin(choice);
 		}
     }
@@ -51,11 +51,11 @@ public class AdminView {
 	        } else if(choice == 3) {
 	    	    AdminView.insertQuestion(choice);
 	        } else {
-	    	    System.out.println("Enter number only [1-3]");
+	    	    LOGGER.warn("Enter number only [1-3]");
 	    	    AdminView.adminServices();
 	        }
 	    } catch(NumberFormatException e) {
-	    	LOGGER.error("Enter the valid Input");
+	    	LOGGER.warn("Enter the valid Input");
 	    	AdminView.adminServices();
 	    }
 	}
@@ -65,7 +65,7 @@ public class AdminView {
 	 * 
 	 * @param choice
 	 */
-	private static void insertQuestion(int choice) {
+	private static void insertQuestion(final int choice) {
 		final int questionNumber = QuizDetail.getQuestionNumber(choice);
 		final boolean isQuestionNumber = QuizController.checkQuestionNumber(choice, questionNumber);
 		
@@ -76,10 +76,10 @@ public class AdminView {
 		} else if (!isQuestionNumber && choice == 3) {
 			AdminView.deleteQuestion(choice, questionNumber);
 		} else if (isQuestionNumber && choice == 1 ) {
-			LOGGER.error("QuestionNumber is ALready exists");
+			LOGGER.warn("QuestionNumber is ALready exists");
 			AdminView.insertQuestion(choice);
 		} else if(isQuestionNumber) {
-			LOGGER.error("Question NUmber is not found");
+			LOGGER.warn("Question NUmber is not found");
 			AdminView.insertQuestion(choice);
 		}
 	}
@@ -90,7 +90,7 @@ public class AdminView {
 	 * @param choice
 	 * @param questionNumber
 	 */
-    public static boolean insertQuestions(final int choice, int questionNumber) {
+    public static boolean insertQuestions(final int choice, final int questionNumber) {
 		final String questions = QuizDetail.getQuestions();
 		final String firstOption = QuizDetail.getFirstOption();
 		final String secondOption = QuizDetail.getSecondOption();
@@ -104,7 +104,7 @@ public class AdminView {
 	        LOGGER.info("Successfully Inserted");
 			getIsContinue();
 	    } else if (!isInserted && choice == 1){
-			LOGGER.info("Insertion failed");
+			LOGGER.warn("Insertion failed");
 			getIsContinue();
 		} 
 		return isInserted;
@@ -120,21 +120,21 @@ public class AdminView {
 		if ("yes".equalsIgnoreCase(isContinue)) {
 			adminServices();
 		} else if ("no".equalsIgnoreCase(isContinue)) {
-			LOGGER.info("....");
+			LOGGER.warn("....");
 		}
 	}
 
 	/**
      * Update in the question into database
      */
-	public static void updateQuestion(final int choice, int questionNumber) {
+	public static void updateQuestion(final int choice, final int questionNumber) {
 	    final boolean isUpdated = AdminView.insertQuestions(choice, questionNumber);
 	    
 	    if (isUpdated) {
 	    	LOGGER.info("Successfully updated");
 	    	getIsContinue();
 	    } else {
-	    	LOGGER.error("updated Failed");
+	    	LOGGER.warn("updated Failed");
 	    	getIsContinue();
 	    }
 	}
@@ -142,14 +142,14 @@ public class AdminView {
 	/**
 	 * Delete in the question into database 
 	 */
-	public static void deleteQuestion(int choice, int questionNumber) {
+	public static void deleteQuestion(final int choice, final int questionNumber) {
 		final boolean isQuestionPresent = QuizController.questionDelete(questionNumber);
 		
 		if (isQuestionPresent) {
 			LOGGER.info("Successfully deleted");
 			getIsContinue();
 		} else {
-			LOGGER.error("Deleted Failed");
+			LOGGER.warn("Deleted Failed");
 			getIsContinue();
 		}
 	}

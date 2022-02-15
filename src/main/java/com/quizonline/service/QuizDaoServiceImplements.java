@@ -15,7 +15,6 @@ import com.quizonline.model.User;
  * @author PandiarajkumarG
  *
  */
-
 public class QuizDaoServiceImplements implements QuizDaoService {
 	
 	private static final Logger LOGGER = Logger.getLogger(QuizDaoServiceImplements.class);
@@ -27,14 +26,14 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * @param choice
 	 * @param user
 	 */
-	public boolean signUpInsert(final int choice, final User user)  {
+	public boolean insertSignUpDetail(final int choice, final User user)  {
 		boolean isSignUp = true;
 		
 		if (choice == 1) {
-		    isSignUp =QUIZ_DAO.adminSignUpInsert(user);
+		    isSignUp =QUIZ_DAO.insertAdminSignUpDetail(user);
 		} else if (choice == 2) {
-			isSignUp = QUIZ_DAO.userSignUpInsert(user);
-		}
+			isSignUp = QUIZ_DAO.insertUserSignUpDetail(user);
+		} 
 		return isSignUp;
 	}
 	
@@ -44,7 +43,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * @param choice
 	 * @param email
 	 */
-	public boolean checkEmail(int choice, String email) {
+	public boolean checkEmail(final int choice, final String email) {
 		boolean isValidEmail = true;
 		
 		if (choice == 1) {
@@ -61,7 +60,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * @param choice
 	 * @param password
 	 */
-	public boolean checkPassword(int choice, String password) {
+	public boolean checkPassword(final int choice, final String password) {
 		boolean isValidPassword = true;
 		
 		if (choice == 1) {
@@ -100,11 +99,11 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 		boolean isInsert = true;
 	    
 		if (roundNumber == 1) {
-	    	 isInsert = QUIZ_DAO.firstRoundInsert(quizTools);
+	    	 isInsert = QUIZ_DAO.insertFirstRoundDetails(quizTools);
 	    } else if (roundNumber == 2) {
-	    	 isInsert = QUIZ_DAO.secondRoundInsert(quizTools);
+	    	 isInsert = QUIZ_DAO.insertSecondRoundDetails(quizTools);
 	    } else if (roundNumber == 3) {
-	    	 isInsert = QUIZ_DAO.thirdRoundInsert(quizTools);
+	    	 isInsert = QUIZ_DAO.insertThirdRoundDetails(quizTools);
 	    }
     	return isInsert;
     }
@@ -195,7 +194,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
      * @param questionNumber
      * 
      */
-	public boolean checkQuestionNumber(int choice, int questionNumber) {
+	public boolean checkQuestionNumber(final int choice, final int questionNumber) {
 		boolean isQuestionNumber = true;
 		
 		if (choice == 1) {
@@ -213,7 +212,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * 
 	 * @param correctAnswer
 	 */
-	public boolean checkAnswer(String correctAnswer) {
+	public boolean checkAnswer(final String correctAnswer) {
 		
 		if ("a".equalsIgnoreCase(correctAnswer) || "b".equalsIgnoreCase(correctAnswer) || "c".equalsIgnoreCase(correctAnswer) || "d".equalsIgnoreCase(correctAnswer)) {
 			return true;
@@ -226,7 +225,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * 
 	 * @param FirstOption
 	 */
-	public boolean checkFirstOption(String firstOption) {
+	public boolean checkFirstOption(final String firstOption) {
 		
 		if (firstOption.matches("[a]{1}[.]{1}[a-zA-Z0-9\\s]{1,}")) {
 			return true;
@@ -239,7 +238,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * 
 	 * @param SecondOption
 	 */
-	public boolean checkSecondOption(String secondOption) {
+	public boolean checkSecondOption(final String secondOption) {
 		
 		if (secondOption.matches("[b]{1}[.]{1}[a-zA-Z0-9\\s]{1,}")) {
 			return true;
@@ -252,7 +251,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * 
 	 * @param thirdOption
 	 */
-	public boolean checkThirdOption(String thirdOption) {
+	public boolean checkThirdOption(final String thirdOption) {
 		
 		if (thirdOption.matches("[c]{1}[.]{1}[a-zA-Z0-9\\s]{1,}")) {
 			return true;
@@ -265,7 +264,7 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	 * 
 	 * @param fourthOption
 	 */
-	public boolean checkFourthOption(String fourthOption) {
+	public boolean checkFourthOption(final String fourthOption) {
 		
 		if (fourthOption.matches("[d]{1}[.]{1}[a-zA-Z0-9\\s]{1,}")) {
 			return true;

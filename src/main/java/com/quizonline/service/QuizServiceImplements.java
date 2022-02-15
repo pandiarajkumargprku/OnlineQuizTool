@@ -9,7 +9,7 @@ package com.quizonline.service;
 public class QuizServiceImplements implements QuizService {
     
     /**
-     * Checks user name
+     * Validate user name
      */
 	public boolean validateName(final String name) {
 		
@@ -20,7 +20,7 @@ public class QuizServiceImplements implements QuizService {
 	}
 	
 	/**
-	 * Checks user email
+	 * Validate user email
 	 */
     public boolean validateEmail(final String email) {
 		
@@ -31,11 +31,11 @@ public class QuizServiceImplements implements QuizService {
 	}
 
     /**
-     * Checks user password
+     * Validate user password
      */
 	public boolean validatePassword(final String password) {
 		
-		if (!password.matches("((?=\\S+$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%]).{6,15})")) {
+		if (!password.matches("((?=\\S+$.*[a-z].*[A-Z].*[0-9].*[@#$%]).{6,15})")) {
 			return false;
 		}
 		return true;

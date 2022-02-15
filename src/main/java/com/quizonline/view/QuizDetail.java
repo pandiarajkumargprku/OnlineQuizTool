@@ -30,7 +30,7 @@ public class QuizDetail {
 	    final String name = OnlineQuizTool.SCANNER.nextLine().trim();
 		
 		if (!QuizController.validateName(name)) {
-            LOGGER.error("Re-Enter Valid Name");
+            LOGGER.warn("Re-Enter Valid Name");
 			return QuizDetail.getName();
 		}
 		return name;
@@ -44,7 +44,7 @@ public class QuizDetail {
 		final String email = OnlineQuizTool.SCANNER.nextLine().trim();
 		
 		if (!QuizController.validateEmail(email)) {
-			LOGGER.error("Re-Enter Valid EmailId");
+			LOGGER.warn("Re-Enter Valid EmailId");
 		    return QuizDetail.getEmail();
 		}
 		return email;
@@ -58,7 +58,7 @@ public class QuizDetail {
 		final String password = OnlineQuizTool.SCANNER.nextLine().trim();
 		
 		if (!QuizController.validatePassword(password)) {
-			LOGGER.error("Re-Enter Valid Password \n(Atleast one Numeric letter, special Characters, Uppercase & lowercase letter)");
+			LOGGER.warn("Re-Enter Valid Password \n(Atleast one Numeric letter, special Characters, Uppercase & lowercase letter)");
 			return QuizDetail.getPassword();
 		}
 		return password;
@@ -75,7 +75,7 @@ public class QuizDetail {
 			questionNumber = Integer.parseInt(OnlineQuizTool.SCANNER.nextLine());
 			
 		} catch(NumberFormatException exception) {
-			LOGGER.error("Re-Enter valid QuestionNumber");
+			LOGGER.warn("Re-Enter valid QuestionNumber");
 			return QuizDetail.getQuestionNumber(choice);
 		}
 		return questionNumber;
@@ -99,7 +99,7 @@ public class QuizDetail {
 		final String firstOption = OnlineQuizTool.SCANNER.nextLine().trim();
 		
 		if (!QuizController.checkFirstOption(firstOption)) {
-		    LOGGER.error("Re-Enter first option e.g[a.india]");
+		    LOGGER.warn("Re-Enter first option e.g[a.india]");
 			return QuizDetail.getFirstOption();
 		}
 		return firstOption;
@@ -113,7 +113,7 @@ public class QuizDetail {
 		final String secondOption = OnlineQuizTool.SCANNER.nextLine().trim();
        
 		if (!QuizController.checkSecondOption(secondOption)) {
-			LOGGER.error("Re-Enter Second option e.g[b.india]");
+			LOGGER.warn("Re-Enter Second option e.g[b.india]");
 			return QuizDetail.getSecondOption();
 		}
 		return secondOption;
@@ -127,7 +127,7 @@ public class QuizDetail {
 		final String thirdOption = OnlineQuizTool.SCANNER.nextLine().trim();
 		
 		if (!QuizController.checkThirdOption(thirdOption)) {
-			LOGGER.error("Re-Enter third option e.g[c.india]");
+			LOGGER.warn("Re-Enter third option e.g[c.india]");
 			return QuizDetail.getThirdOption();
 		}
 		return thirdOption;
@@ -141,7 +141,7 @@ public class QuizDetail {
 		final String fourthOption = OnlineQuizTool.SCANNER.nextLine().trim();
 		
 		if (!QuizController.checkFourthOption(fourthOption)) {
-			LOGGER.error("Re-Enter fourth option e.g[d.india]");
+			LOGGER.warn("Re-Enter fourth option e.g[d.india]");
 			return QuizDetail.getFourthOption();
 		}
 		return fourthOption;
@@ -155,7 +155,7 @@ public class QuizDetail {
 	    final String correctAnswer = OnlineQuizTool.SCANNER.nextLine();
 		
 	    if (!QuizController.checkCorrectAnswer(correctAnswer)) {
-	    	LOGGER.error("Re-Enter Correct Answer [a, b, c, d]");
+	    	LOGGER.warn("Re-Enter Correct Answer [a, b, c, d]");
 	    	return QuizDetail.getCorrectAnswer();
 	    }
 		return correctAnswer;
@@ -170,7 +170,7 @@ public class QuizDetail {
 		final String email = QuizDetail.getEmail();
 		
 		if (QuizController.checkEmail(choice, email)) {
-			LOGGER.error("This Mail Id Already Exists \nRe-Enter Mail Id");
+			LOGGER.warn("This Mail Id Already Exists \nRe-Enter Mail Id");
 			return QuizDetail.getAdminEmailCheck(choice);
 		}
 		return email;
@@ -203,7 +203,7 @@ public class QuizDetail {
 	 */
 	private static void checkContinue(final int choice) {
 		LOGGER.info("Do You Want to continue");
-		String isContinue = OnlineQuizTool.SCANNER.nextLine();
+		final String isContinue = OnlineQuizTool.SCANNER.nextLine();
 		
 		if ("yes".equalsIgnoreCase(isContinue)) {
 			signIn(choice);
@@ -221,17 +221,17 @@ public class QuizDetail {
 	 */
 	private static boolean getPasswordCheck(final int choice) {
 		final String password = QuizDetail.getPassword();
-		boolean isValidPassword = QuizController.checkPassword(choice, password);
+		final boolean isValidPassword = QuizController.checkPassword(choice, password);
 		
 		if (!isValidPassword) {
-			LOGGER.error("Passwowrd is Wrong");
+			LOGGER.warn("Passwowrd is Wrong");
 			QuizDetail.getPasswordCheck(choice);
 		}
 		return isValidPassword;
 	}
 	
 	/**
-	 * Method which makes signIn function
+	 * Which makes signIn function
 	 * 
 	 * @param choice
 	 */
@@ -257,7 +257,7 @@ public class QuizDetail {
 		final String email = QuizDetail.getEmail();
 		
 		if (!QuizController.checkEmail(choice, email)) {
-			LOGGER.error("Email is wrong");
+			LOGGER.warn("Email is wrong");
 			QuizDetail.getUserEmailCheck(choice);
 		}
 		return email;

@@ -2,6 +2,7 @@ package com.quizonline.controller;
 
 import java.util.List;
 
+
 import com.quizonline.model.Quiz;
 import com.quizonline.model.User;
 import com.quizonline.service.QuizDaoService;
@@ -9,7 +10,6 @@ import com.quizonline.service.QuizDaoServiceImplements;
 import com.quizonline.service.QuizService;
 import com.quizonline.service.QuizServiceImplements;
 import com.quizonline.view.AdminView;
-import com.quizonline.view.UserView;
 
 /**
  * <h1> QuizController </h1>
@@ -61,7 +61,7 @@ public class QuizController {
 	 * @return
 	 */
 	public static boolean signUpInsert(final int choice, final User user) {
-		return QUIZ_DAO_SERVICE.signUpInsert(choice, user);
+		return QUIZ_DAO_SERVICE.insertSignUpDetail(choice, user);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class QuizController {
 	 * @param email
 	 * @return
 	 */
-	public static boolean checkEmail(int choice, String email) {
+	public static boolean checkEmail(int choice, final String email) {
 		return QUIZ_DAO_SERVICE.checkEmail(choice, email);
 	}
 	
@@ -82,7 +82,7 @@ public class QuizController {
 	 * @param password
 	 * @return
 	 */
-	public static boolean checkPassword(int choice, String password) {
+	public static boolean checkPassword(final int choice, final String password) {
 		return QUIZ_DAO_SERVICE.checkPassword(choice, password);
 	}
 	
@@ -115,21 +115,12 @@ public class QuizController {
 	}
 
 	/**
-	 * Provides quiz level to the user by getting emailid
-	 *  
-	 * @param email
-	 */
-	public static void userServices(final String email) {
-		UserView.userServices(email);
-	}
-
-	/**
 	 * All level questions get from the database
 	 * 
 	 * @param level
 	 * @return
 	 */
-	public static List<Quiz> getRoundDetails(int level) {
+	public static List<Quiz> getRoundDetails(final int level) {
 		return QUIZ_DAO_SERVICE.getRoundDetails(level);
 	}
 
@@ -140,7 +131,7 @@ public class QuizController {
 	 * @param email
 	 * @return
 	 */
-	public static boolean markInsert(int mark, final String email) {
+	public static boolean markInsert(final int mark, final String email) {
 		return QUIZ_DAO_SERVICE.markInsert(mark, email);
 	}
 
@@ -150,7 +141,7 @@ public class QuizController {
 	 * @param questionNumber
 	 * @return
 	 */
-	public static boolean checkQuestionNumber(int choice, int questionNumber) {
+	public static boolean checkQuestionNumber(final int choice, final int questionNumber) {
 		return QUIZ_DAO_SERVICE.checkQuestionNumber(choice, questionNumber);
 	}
 
@@ -160,7 +151,7 @@ public class QuizController {
 	 * @param correctAnswer
 	 * @return
 	 */
-	public static boolean checkCorrectAnswer(String correctAnswer) {
+	public static boolean checkCorrectAnswer(final String correctAnswer) {
 		return QUIZ_DAO_SERVICE.checkAnswer(correctAnswer);
 	}
 
@@ -170,7 +161,7 @@ public class QuizController {
 	 * @param firstOption
 	 * @return
 	 */
-	public static boolean checkFirstOption(String firstOption) {
+	public static boolean checkFirstOption(final String firstOption) {
 		return QUIZ_DAO_SERVICE.checkFirstOption(firstOption);
 	}
 	
@@ -180,7 +171,7 @@ public class QuizController {
 	 * @param secondOption
 	 * @return
 	 */
-	public static boolean checkSecondOption(String secondOption) {
+	public static boolean checkSecondOption(final String secondOption) {
 		return QUIZ_DAO_SERVICE.checkSecondOption(secondOption);
 	}
 	
@@ -190,7 +181,7 @@ public class QuizController {
 	 * @param thirdOption
 	 * @return
 	 */
-	public static boolean checkThirdOption(String thirdOption) {
+	public static boolean checkThirdOption(final String thirdOption) {
 		return QUIZ_DAO_SERVICE.checkThirdOption(thirdOption);
 	}
 	
@@ -200,7 +191,7 @@ public class QuizController {
 	 * @param fourthOption
 	 * @return
 	 */
-	public static boolean checkFourthOption(String fourthOption) {
+	public static boolean checkFourthOption(final String fourthOption) {
 		return QUIZ_DAO_SERVICE.checkFourthOption(fourthOption);
 	}
 }

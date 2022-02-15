@@ -13,29 +13,29 @@ import com.quizonline.model.User;
  */
 public interface QuizDaoService {
 
-	boolean signUpInsert(int choice, User user);
+	boolean insertSignUpDetail(final int choice, final User user);
 	
-    boolean questionInsert(final int choice, Quiz quizTools);
+    boolean questionInsert(final int choice, final Quiz quizTools);
     
     boolean questionDelete(final int questionNumber);
 
-	List<Quiz> getRoundDetails(int level);
+	List<Quiz> getRoundDetails(final int level);
 	
-	boolean markInsert(int mark, final String email);
+	boolean markInsert(final int mark, final String email);
 	
-	boolean checkEmail(int choice, String email);
+	boolean checkEmail(final int choice, final String email);
 
-	boolean checkPassword(int choice, String password);
+	boolean checkPassword(final int choice, final String password);
 
-	boolean checkQuestionNumber(int choice, int questionNumber);
+	boolean checkQuestionNumber(final int choice, final int questionNumber);
 
-	boolean checkAnswer(String correctAnswer);
+	boolean checkAnswer(final String correctAnswer);
 
-	boolean checkFirstOption(String firstOption);
+	boolean checkFirstOption(final String firstOption);
 
-	boolean checkSecondOption(String secondOption);
+	boolean checkSecondOption(final String secondOption);
 
-	boolean checkThirdOption(String thirdOption);
+	boolean checkThirdOption(final String thirdOption);
 
-	boolean checkFourthOption(String fourthOption);
+	boolean checkFourthOption(final String fourthOption);
 }

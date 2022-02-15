@@ -117,7 +117,7 @@ public class QuizDaoImplements {
 	 * 
 	 * @param user
 	 */
-	public boolean adminSignUpInsert(final User user) {
+	public boolean insertAdminSignUpDetail(final User user) {
 		final String sqlQuery = "Insert Into admin_table(name, email, password) values (?, ?, ?)";
 		
 		return insertSignUpDetails(sqlQuery, user);
@@ -128,7 +128,7 @@ public class QuizDaoImplements {
 	 * 
 	 * @param user
 	 */
-	public boolean userSignUpInsert(final User user) {
+	public boolean insertUserSignUpDetail(final User user) {
 		final String sqlQuery = "Insert Into user_table(name, email, password) values (?, ?, ?)";
 		
 		return insertSignUpDetails(sqlQuery, user);
@@ -161,11 +161,10 @@ public class QuizDaoImplements {
 	 * 
 	 * @param quizTools
 	 */
-	public boolean firstRoundInsert(final Quiz quizTools) {
+	public boolean insertFirstRoundDetails(final Quiz quizTools) {
 	    final String sqlQuery = "Insert Into first_round_table values (?, ?, ?, ?, ?, ?, ?)";
-	    final boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
 	    
-	    return isInserted;
+	    return QuizDaoImplements.prepareStatementForInsertTable(sqlQuery, quizTools);
 	}
 	
 	/**
@@ -173,11 +172,10 @@ public class QuizDaoImplements {
 	 * 
 	 * @param quizTools
 	 */
-	public boolean secondRoundInsert(final Quiz quizTools) {
+	public boolean insertSecondRoundDetails(final Quiz quizTools) {
 	    final String sqlQuery = "Insert Into second_round_table values(?, ?, ?, ?, ?, ?, ?)";
-	    final boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
 	    
-	    return isInserted;
+	    return QuizDaoImplements.prepareStatementForInsertTable(sqlQuery, quizTools);
 	}
 	
 	/**
@@ -185,11 +183,10 @@ public class QuizDaoImplements {
 	 * 
 	 * @param quizTools
 	 */
-    public boolean thirdRoundInsert(final Quiz quizTools) {
+    public boolean insertThirdRoundDetails(final Quiz quizTools) {
 	    final String sqlQuery = "Insert Into third_round_table values(?, ?, ?, ?, ?, ?, ?)";
-	    final boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
 	    
-	    return isInserted;
+	    return QuizDaoImplements.prepareStatementForInsertTable(sqlQuery, quizTools);
 	}
 	
     /**
@@ -198,7 +195,7 @@ public class QuizDaoImplements {
      * @param Sqlquery
      * @param quizTools
      */
-	public static boolean prepareStatementForInsertTable(final String sqlQuery, final Quiz quizTools) {
+	private static boolean prepareStatementForInsertTable(final String sqlQuery, final Quiz quizTools) {
 		
 		try (Connection connection = DataBaseConnection.getConnection();
 		    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
@@ -264,7 +261,7 @@ public class QuizDaoImplements {
 			PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
 		    prepareStatement.setInt(1, questionNumber);
 				 
-		    try (ResultSet resultSet = prepareStatement.executeQuery();){
+		    try (ResultSet resultSet = prepareStatement.executeQuery();) {
 				 
 			    while (resultSet.next()) {
 			        return true;
@@ -283,9 +280,8 @@ public class QuizDaoImplements {
 	 */
     public boolean firstRoundUpdate(final Quiz quizTools) {
 		final String sqlQuery = "Update first_round_table SET questions = ?, first_option = ?, second_option = ?, third_option = ?, fourth_option = ?, correct_answer = ? WHERE question_number = ?";
-		boolean isUpdated = QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
 		
-		return isUpdated;
+		return QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
 	}
 	
     /**
@@ -295,9 +291,8 @@ public class QuizDaoImplements {
      */
     public boolean secondRoundUpdate(final Quiz quizTools) {
 		final String sqlQuery = "Update second_round_table SET questions = ?, first_option = ?, second_option = ?, third_option = ?, fourth_option = ?, correct_answer = ? WHERE question_number = ?";
-		boolean isUpdated = QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
 		
-		return isUpdated;
+		return QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
 	}
     
     /**
@@ -307,9 +302,8 @@ public class QuizDaoImplements {
      */
     public boolean thirdRoundUpdate(final Quiz quizTools) {
 		final String sqlQuery = "Update third_round_table SET questions = ?, first_option = ?, second_option = ?, third_option = ?, fourth_option = ?, correct_answer = ? WHERE question_number = ?";
-		boolean isUpdated = QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
 		
-		return isUpdated;
+		return QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
 	}
     
     /**
@@ -321,7 +315,7 @@ public class QuizDaoImplements {
 	public static boolean prepareStatementForUpdateTable(final String sqlQuery, final Quiz quizTools) {
 		
 		try (Connection connection = DataBaseConnection.getConnection();
-		        PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+		    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
 		    
 			prepareStatement.setString(1, quizTools.getQuestions());
 			prepareStatement.setString(2, quizTools.getFirstOption());
@@ -345,9 +339,8 @@ public class QuizDaoImplements {
 	 */
 	public boolean firstRoundDelete(final int questionNumber) {
 		final String sqlQuery = "Delete from first_round_table where question_number = ?";
-		boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
 		
-		return isDelete;
+		return QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
 	}
 	
 	/**
@@ -357,10 +350,9 @@ public class QuizDaoImplements {
 	 */
     public boolean secondRoundDelete(final int questionNumber) {
     	final String sqlQuery = "Delete from second_round_table where question_number = ?";
-		boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
-    	
-    	return isDelete;
-	}
+		
+    	return QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
+    }
     
     /**
      * Delete thirdRound from thirdRoundTable
@@ -369,10 +361,9 @@ public class QuizDaoImplements {
      */
     public boolean thirdRoundDelete(final int questionNumber) {
     	final String sqlQuery = "Delete from third_round_table where question_number = ?";
-		boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
-    	
-    	return isDelete;
-	}
+		
+    	return QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
+    }
     
     /**
      * Execute query using PrepareStatament

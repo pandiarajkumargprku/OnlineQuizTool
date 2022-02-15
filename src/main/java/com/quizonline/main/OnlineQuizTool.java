@@ -55,11 +55,11 @@ public class OnlineQuizTool {
 		        UserView.user(choice);
 		        break;
 	        default:
-		        LOGGER.error("Enter valid number [1-2]");
+		        LOGGER.warn("Enter valid number [1-2]");
 		        checkAdminOrUser();
 	        }
 		} catch(NumberFormatException exception) {
-			LOGGER.error("Re-Enter valid choice");
+			LOGGER.warn("Re-Enter valid choice");
 			checkAdminOrUser();
 		}
 	}		
