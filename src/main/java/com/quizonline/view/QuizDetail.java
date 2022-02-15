@@ -7,7 +7,7 @@ import com.quizonline.main.OnlineQuizTool;
 import com.quizonline.model.User;
 
 /**
- *Quiz View
+ * <h1> Quiz View </h1>
  * 
  * @author PandiarajkumarG
  */
@@ -16,39 +16,35 @@ public class QuizDetail {
 	private static final Logger LOGGER = Logger.getLogger(QuizDetail.class);
 	
 	/**
-	 * getchoice
+	 * Get choice from user
 	 */
 	public static String getChoice() {
-		String choice = OnlineQuizTool.SCANNER.nextLine().trim();
-		
-		return choice;
+	    return OnlineQuizTool.SCANNER.nextLine().trim();
 	}
     
 	/**
-     * Get Name to the user
+     * Get name to the user
      */
 	public static String getName() {
 		LOGGER.info("Enter name:");
-	    final String name =OnlineQuizTool.SCANNER.nextLine().trim();
-		boolean isNameValid =  QuizController.checkName(name);
+	    final String name = OnlineQuizTool.SCANNER.nextLine().trim();
 		
-		if (!isNameValid) {
-            LOGGER.error("Pls Re-Enter Valid Name");
+		if (!QuizController.validateName(name)) {
+            LOGGER.error("Re-Enter Valid Name");
 			return QuizDetail.getName();
 		}
 		return name;
 	}
 	
 	/**
-	 * Get Email to the user
+	 * Get email to the user
 	 */
 	public static String getEmail() {
 		LOGGER.info("Enter email:");
 		final String email = OnlineQuizTool.SCANNER.nextLine().trim();
-		boolean isEmailValid = QuizController.checkEmail(email);
 		
-		if(!isEmailValid) {
-			 LOGGER.error("Pls Re-Enter Valid EmailId");
+		if (!QuizController.validateEmail(email)) {
+			LOGGER.error("Re-Enter Valid EmailId");
 		    return QuizDetail.getEmail();
 		}
 		return email;
@@ -60,10 +56,9 @@ public class QuizDetail {
 	public static String getPassword() {
 		LOGGER.info("Enter password");
 		final String password = OnlineQuizTool.SCANNER.nextLine().trim();
-		boolean isPasswordValid =  QuizController.checkPassword(password);
 		
-		if(!isPasswordValid) {
-			LOGGER.error("Pls Re-Enter Valid Password \n(Atleast one Numeric letter, special Characters, Uppercase & lowercase letter)");
+		if (!QuizController.validatePassword(password)) {
+			LOGGER.error("Re-Enter Valid Password \n(Atleast one Numeric letter, special Characters, Uppercase & lowercase letter)");
 			return QuizDetail.getPassword();
 		}
 		return password;
@@ -72,15 +67,15 @@ public class QuizDetail {
 	/**
      * Get QustionNumber to the user
      */
-	public static int getQuestionNumber(int choice) {
+	public static int getQuestionNumber(final int choice) {
 		LOGGER.info("Enter question number");
 		int questionNumber = 0;
 		
 		try {
 			questionNumber = Integer.parseInt(OnlineQuizTool.SCANNER.nextLine());
 			
-		} catch(NumberFormatException e) {
-			 LOGGER.error("Pls Re-Enter valid QuestionNumber");
+		} catch(NumberFormatException exception) {
+			LOGGER.error("Re-Enter valid QuestionNumber");
 			return QuizDetail.getQuestionNumber(choice);
 		}
 		return questionNumber;
@@ -102,10 +97,9 @@ public class QuizDetail {
 	public static String getFirstOption() {
 		LOGGER.info("Enter first option");
 		final String firstOption = OnlineQuizTool.SCANNER.nextLine().trim();
-		boolean isFirstOptionCorrect =  QuizController.checkFirstOption(firstOption);
 		
-		if(!isFirstOptionCorrect) {
-			 LOGGER.error("Plese Re-Enter first option e.g[a.india]");
+		if (!QuizController.checkFirstOption(firstOption)) {
+		    LOGGER.error("Re-Enter first option e.g[a.india]");
 			return QuizDetail.getFirstOption();
 		}
 		return firstOption;
@@ -117,10 +111,9 @@ public class QuizDetail {
 	public static String getSecondOption() {
 		LOGGER.info("Enter second option");
 		final String secondOption = OnlineQuizTool.SCANNER.nextLine().trim();
-        boolean isSecondOptionCorrect =  QuizController.checkSecondOption(secondOption);
-		
-		if(!isSecondOptionCorrect) {
-			 LOGGER.error("Plese Re-Enter Second option e.g[b.india]");
+       
+		if (!QuizController.checkSecondOption(secondOption)) {
+			LOGGER.error("Re-Enter Second option e.g[b.india]");
 			return QuizDetail.getSecondOption();
 		}
 		return secondOption;
@@ -132,10 +125,9 @@ public class QuizDetail {
 	public static String getThirdOption() {
 		LOGGER.info("Enter third option");
 		final String thirdOption = OnlineQuizTool.SCANNER.nextLine().trim();
-        boolean isThirdOptionCorrect =  QuizController.checkThirdOption(thirdOption);
 		
-		if(!isThirdOptionCorrect) {
-			 LOGGER.error("Plese Re-Enter third option e.g[c.india]");
+		if (!QuizController.checkThirdOption(thirdOption)) {
+			LOGGER.error("Re-Enter third option e.g[c.india]");
 			return QuizDetail.getThirdOption();
 		}
 		return thirdOption;
@@ -147,10 +139,9 @@ public class QuizDetail {
 	public static String getFourthOption() {
 		LOGGER.info("Enter fourth option");
 		final String fourthOption = OnlineQuizTool.SCANNER.nextLine().trim();
-        boolean isFourthOptionCorrect =  QuizController.checkFourthOption(fourthOption);
 		
-		if(!isFourthOptionCorrect) {
-			 LOGGER.error("Plese Re-Enter fourth option e.g[d.india]");
+		if (!QuizController.checkFourthOption(fourthOption)) {
+			LOGGER.error("Re-Enter fourth option e.g[d.india]");
 			return QuizDetail.getFourthOption();
 		}
 		return fourthOption;
@@ -162,132 +153,123 @@ public class QuizDetail {
 	public static String getCorrectAnswer() {
 		LOGGER.info("Enter correctanswer");
 	    final String correctAnswer = OnlineQuizTool.SCANNER.nextLine();
-	    boolean isAnswerValid =  QuizController.checkCorrectAnswer(correctAnswer);
 		
-	    if(!isAnswerValid) {
-	    	 LOGGER.error("Pls Re-Enter Correct Answer [a,b,c or d]");
+	    if (!QuizController.checkCorrectAnswer(correctAnswer)) {
+	    	LOGGER.error("Re-Enter Correct Answer [a, b, c, d]");
 	    	return QuizDetail.getCorrectAnswer();
 	    }
 		return correctAnswer;
 	}
 	
 	/**
-	 * check email
+	 * Get email from user
+	 * 
+	 * @param choice
 	 */
-	private static String getEmailCheck(int choice) {
+	private static String getAdminEmailCheck(final int choice) {
 		final String email = QuizDetail.getEmail();
-		boolean isEmailValid = QuizDetail.checkEmail(choice, email);
 		
-		if (isEmailValid) {
-			 LOGGER.error("This Mail Id Already Exists \nPlease Re-Enter Mail Id");
-			return QuizDetail.getEmailCheck(choice);
+		if (QuizController.checkEmail(choice, email)) {
+			LOGGER.error("This Mail Id Already Exists \nRe-Enter Mail Id");
+			return QuizDetail.getAdminEmailCheck(choice);
 		}
 		return email;
 	}
 	
 	/**
-	 * get signUp detail
+	 * Get signUp detail
+	 * 
+	 * @param choice
 	 */
 	public static void signUp(final int choice) {
 		final String name = QuizDetail.getName();
-		final String email = QuizDetail.getEmailCheck(choice);
+		final String email = QuizDetail.getAdminEmailCheck(choice);
 		final String password = QuizDetail.getPassword();
+		final User user = new User(name, email, password);
 		
-		User user = new User(name, email, password);
-		boolean isSignUp = QuizController.signUpInsert(choice, user);
-		
-		if (isSignUp) {
+		if (QuizController.signUpInsert(choice, user)) {
 			 LOGGER.info("Successfuly SignUp");
-			isContinue(choice);
+			 checkContinue(choice);
 		} else {
 			 LOGGER.error("SignUp failed");
-			signUp(choice);
+			 signUp(choice);
 		}
 	}
 	
 	/**
-	 * continue or not
+	 * Checks continue 
+	 * 
+	 * @param choice
 	 */
-	private static void isContinue(int choice) {
+	private static void checkContinue(final int choice) {
 		LOGGER.info("Do You Want to continue");
 		String isContinue = OnlineQuizTool.SCANNER.nextLine();
 		
-		if("yes".equalsIgnoreCase(isContinue)) {
+		if ("yes".equalsIgnoreCase(isContinue)) {
 			signIn(choice);
-		} else if("no".equalsIgnoreCase(isContinue)) {
-			System.out.println("...");
+		} else if ("no".equalsIgnoreCase(isContinue)) {
+			LOGGER.info("...");
+		} else {
+			checkContinue(choice);
 		}
 	}
 
 	/**
-	 * get password then check password
+	 * Get password then check password
+	 * 
+	 * @param choice
 	 */
-	private static boolean getPasswordCheck(int choice) {
+	private static boolean getPasswordCheck(final int choice) {
 		final String password = QuizDetail.getPassword();
-		boolean isPasswordValid = QuizDetail.checkPassword(choice, password);
+		boolean isValidPassword = QuizController.checkPassword(choice, password);
 		
-		if(!isPasswordValid) {
-			 LOGGER.error("Passwowrd is Wrong");
+		if (!isValidPassword) {
+			LOGGER.error("Passwowrd is Wrong");
 			QuizDetail.getPasswordCheck(choice);
 		}
-		return isPasswordValid;
+		return isValidPassword;
 	}
 	
 	/**
-	 * Method which makes SignIn function
+	 * Method which makes signIn function
+	 * 
+	 * @param choice
 	 */
 	public static void signIn(final int choice) {
 		final String email = QuizDetail.getUserEmailCheck(choice);
-		final boolean passwordValid = QuizDetail.getPasswordCheck(choice);
+		final boolean isValidPassword = QuizDetail.getPasswordCheck(choice);
 		
-		if (passwordValid) {
-			 LOGGER.info("Successfully signIn");
+		if (isValidPassword) {
+		    LOGGER.info("Successfully signIn");
 			QuizDetail.Services(choice, email);
-			
 		} else {
-			 LOGGER.error("SignIn Failed");
+			LOGGER.error("SignIn Failed");
 			QuizDetail.signIn(choice);
-			
 		}
 	}
 	
 	/**
-	 * get User email then email check 
+	 * Get user email then email check
+	 * 
+	 *  @param choice
 	 */
 	private static String getUserEmailCheck(int choice) {
 		final String email = QuizDetail.getEmail();
-		boolean isEmailValid = QuizDetail.checkEmail(choice, email);
 		
-		if (!isEmailValid) {
-			 LOGGER.error("Email is wrong");
+		if (!QuizController.checkEmail(choice, email)) {
+			LOGGER.error("Email is wrong");
 			QuizDetail.getUserEmailCheck(choice);
 		}
 		return email;
 	}
 
 	/**
-	 * check password
+	 * Services admin or user
+	 * 
+	 * @param choice
+	 * @param email
 	 */
-	private static boolean checkPassword(int choice, String password) {
-		boolean isPassword = QuizController.checkPassword(choice, password);
-		
-		return isPassword;
-		
-	}
-
-	/**
-	 * check email
-	 */
-	private static boolean checkEmail(int choice, String email) {
-		boolean isEmail = QuizController.checkEmail(choice, email);
-        
-		return isEmail;
-	}
-	
-	/**
-	 * services admin or user
-	 */
-	private static void Services(int choice, String email) {
+	private static void Services(final int choice,final String email) {
 		 
 		if (choice == 1) {
 			AdminView.adminServices();

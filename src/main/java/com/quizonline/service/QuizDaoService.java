@@ -5,6 +5,12 @@ import java.util.List;
 import com.quizonline.model.Quiz;
 import com.quizonline.model.User;
 
+/**
+ * <h1> Quiz Database Service </h1>
+ * 
+ * @author PandiarajkumarG
+ *
+ */
 public interface QuizDaoService {
 
 	boolean signUpInsert(int choice, User user);

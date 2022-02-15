@@ -9,13 +9,23 @@ import com.quizonline.main.OnlineQuizTool;
 import com.quizonline.model.Quiz;
 import com.quizonline.model.User;
 
+/**
+ * <h1> Quiz Dao Service Implements </h1>
+ * 
+ * @author PandiarajkumarG
+ *
+ */
+
 public class QuizDaoServiceImplements implements QuizDaoService {
 	
 	private static final Logger LOGGER = Logger.getLogger(QuizDaoServiceImplements.class);
 	private static final QuizDaoImplements QUIZ_DAO = new QuizDaoImplements();
 	
 	/**
-	 * check SignUp Admin or User
+	 * Check signUp admin or user
+	 * 
+	 * @param choice
+	 * @param user
 	 */
 	public boolean signUpInsert(final int choice, final User user)  {
 		boolean isSignUp = true;
@@ -29,35 +39,44 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	}
 	
 	/**
-	 * check email
+	 * Check email
+	 * 
+	 * @param choice
+	 * @param email
 	 */
 	public boolean checkEmail(int choice, String email) {
-		boolean isEmailValid = true;
+		boolean isValidEmail = true;
 		
 		if (choice == 1) {
-			isEmailValid = QUIZ_DAO.checkAdminEmail(email);
+			isValidEmail = QUIZ_DAO.checkAdminEmail(email);
 		} else if (choice == 2) {
-			isEmailValid = QUIZ_DAO.checkUserEmail(email);
+			isValidEmail = QUIZ_DAO.checkUserEmail(email);
 		}
-		return isEmailValid;
+		return isValidEmail;
 	}
 	
 	/**
-	 * check password
+	 * Check password
+	 * 
+	 * @param choice
+	 * @param password
 	 */
 	public boolean checkPassword(int choice, String password) {
-		boolean isPasswordValid = true;
+		boolean isValidPassword = true;
 		
 		if (choice == 1) {
-			isPasswordValid = QUIZ_DAO.checkAdminPassword(password);
+			isValidPassword = QUIZ_DAO.checkAdminPassword(password);
 		} else if (choice == 2) {
-			isPasswordValid = QUIZ_DAO.checkUserPassword(password);
+			isValidPassword = QUIZ_DAO.checkUserPassword(password);
 		}
-		return isPasswordValid;
+		return isValidPassword;
 	}
 	
 	/**
-     * insert and update question into the database
+     * Check insert or update question into the database
+     * 
+     * @param choice
+     * @param quizTools
      */
     public boolean questionInsert(final int choice, final Quiz quizTools) {
     	boolean isQuestionInsert = true;
@@ -71,7 +90,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
     }
     
     /**
-     * question insert into database
+     * Question insert into database
+     * 
+     * @param quizTools
      */
     private static boolean insertQuestion(final Quiz quizTools) {
     	LOGGER.info("Which round to you insert ?");
@@ -89,7 +110,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
     }
     
     /**
-     * questions update into database
+     * Questions update into database
+     * 
+     * @param quizTools
     */
     private static boolean updateQuestion(final Quiz quizTools) {
     	LOGGER.info("which round to you update ?");
@@ -110,15 +133,18 @@ public class QuizDaoServiceImplements implements QuizDaoService {
     }
     
    /**
-    * questionDelete into database
+    * Question delete into database
+    * 
+    * @param questionNumber
     */
    public boolean questionDelete(final int questionNumber) {
 	   LOGGER.info("which round question to delete ?");
    	   final int roundNumber = Integer.parseInt(OnlineQuizTool.SCANNER.nextLine());
    	   boolean isDelete = true;
    	
-   	   if(isDelete) {
-           if (roundNumber == 1) {
+   	   if (isDelete) {
+          
+   		   if (roundNumber == 1) {
     	       isDelete = QUIZ_DAO.firstRoundDelete(questionNumber);
    	       } else if (roundNumber == 2) {   		
    	    	   isDelete = QUIZ_DAO.secondRoundDelete(questionNumber);
@@ -130,7 +156,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
     }
    
     /**
-     * getRoundDetails from dataBase
+     * GetRoundDetails from dataBase
+     * 
+     * @param level
      */
     public List<Quiz> getRoundDetails(final int level) {
     
@@ -145,12 +173,14 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	}
     
     /**
-     * mark Insert into dataBase
+     * Mark Insert into dataBase
+     * 
+     * @param mark
+     * @param email
      */
     public boolean markInsert(final int mark, final String email) {
-    	boolean isEmail = QUIZ_DAO.checkUserEmail(email);
     	
-    	if (isEmail) {
+    	if (QUIZ_DAO.checkUserEmail(email)) {
     		QUIZ_DAO.markInsert(mark, email);
     	} else {
     		return false;
@@ -159,7 +189,10 @@ public class QuizDaoServiceImplements implements QuizDaoService {
     }
 
     /**
-     * check questionNumber
+     * Check questionNumber
+     * 
+     * @param choice
+     * @param questionNumber
      * 
      */
 	public boolean checkQuestionNumber(int choice, int questionNumber) {
@@ -176,7 +209,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	}
 
 	/**
-	 * check correctAnswer
+	 * Check correctAnswer
+	 * 
+	 * @param correctAnswer
 	 */
 	public boolean checkAnswer(String correctAnswer) {
 		
@@ -187,7 +222,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	}
 	
 	/**
-	 * check firstOption
+	 * Check firstOption
+	 * 
+	 * @param FirstOption
 	 */
 	public boolean checkFirstOption(String firstOption) {
 		
@@ -198,7 +235,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	}
 
 	/**
-	 * check secondOption
+	 * Check secondOption
+	 * 
+	 * @param SecondOption
 	 */
 	public boolean checkSecondOption(String secondOption) {
 		
@@ -209,7 +248,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	}
 
 	/**
-	 * check thirdOption
+	 * Check thirdOption
+	 * 
+	 * @param thirdOption
 	 */
 	public boolean checkThirdOption(String thirdOption) {
 		
@@ -220,7 +261,9 @@ public class QuizDaoServiceImplements implements QuizDaoService {
 	}
 
 	/**
-	 * check fourthOption
+	 * Check fourthOption
+	 * 
+	 * @param fourthOption
 	 */
 	public boolean checkFourthOption(String fourthOption) {
 		

@@ -1,194 +1,207 @@
 package com.quizonline.dao;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.quizonline.model.Quiz;
 import com.quizonline.model.User;
-import com.quizonline.customexception.CustomException.MailIdNotFoundException;
-import com.quizonline.customexception.CustomException.AccessFailedException;
-import com.quizonline.customexception.CustomException.PasswordNotFoundException;
 import com.quizonline.customexception.CustomException.ConnectionException;
 
-
 /**
- * <h1>QuizDao</h1>
+ * <h1> QuizDao </h1>
  * 
  * @author PandiarajkumarG
  */
 public class QuizDaoImplements {
 	
 	/**
-	 * check SignUp in Admin table
+	 * Check signUp in admin table
+	 * 
+	 * @param email
 	 */
-	public  boolean checkAdminEmail(final String email) {
-		final String sqlQuery = "select email from admin_table where BINARY email = ?";
-
-		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			    prepareStatement.setString(1, email);
-			 
-			 try (ResultSet resultSet = prepareStatement.executeQuery();){
-			 
-			     while (resultSet.next()) {
-			         return true;
-			     }
-             }
-		} catch(Exception e) {
-			throw new MailIdNotFoundException("Admin Mail Id Not Found");
-		}
-		return false;
+	public boolean checkAdminEmail(final String email) {
+		final String sqlQuery = "select email from admin_table where email = ?";
+		
+		return checkMailCredentials(email, sqlQuery);
 	}
 	
 	/**
-	 * check signIn in admin table
+	 * Check signIn in user table
+	 * 
+	 * @param email
 	 */
 	public boolean checkUserEmail(final String email) {
-		final String sqlQuery = "select email from user_table where BINARY email = ?";
-
-		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			 prepareStatement.setString(1, email);
-			 
-			 try (ResultSet resultSet = prepareStatement.executeQuery();){
-			 
-			     while (resultSet.next()) {
-			         return true;
-			     }
-             }
-		} catch(Exception e) {
-			throw new MailIdNotFoundException("User Mail Id Not Found");
-		}
-		return false;
+		final String sqlQuery = "select email from user_table where email = ?";
+		
+		return checkMailCredentials(email, sqlQuery);
 	}
 	
 	/**
-	 * Check Admin Password
+	 * Check email and password
+	 * 
+	 * @param email
+	 * @param sqlQuery
+	 */
+	private boolean checkMailCredentials(String email, String sqlQuery) {
+		
+		try (Connection connection = DataBaseConnection.getConnection();
+		    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+			prepareStatement.setString(1, email);
+				 
+		    try (ResultSet resultSet = prepareStatement.executeQuery();) {
+				 
+			    while (resultSet.next()) {
+		            return true;
+			    }
+	        }
+		} catch (SQLException exception) {
+			throw new ConnectionException("Connection Failed");
+		}
+		return false;
+	}
+
+    /**
+	 * Check admin password
+	 * 
+	 * @param password
 	 */
 	public boolean checkAdminPassword(final String password) {
-		final String sqlQuery = "select email from admin_table where BINARY password = ?";
-
-		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			 prepareStatement.setString(1, password);
-			 
-			 try(ResultSet resultSet = prepareStatement.executeQuery();){
-			 
-			     while(resultSet.next()) {
-			         return true;
-			     }
-             }
-		} catch(Exception e) {
-			throw new PasswordNotFoundException("Admin Password not found");
-		}
-		return false;
+		final String sqlQuery = "select email from admin_table where password = ?";
+		
+		return checkPasswordCredentials(password, sqlQuery);
 	}
 	
 	/**
-	 * check User Password
+	 * Check user password
+	 * 
+	 * @param password
 	 */
 	public boolean checkUserPassword(final String password) {
-		final String sqlQuery = "select email from user_table where BINARY password = ?";
-
+		final String sqlQuery = "select email from user_table where password = ?";
+	
+		return checkPasswordCredentials(password, sqlQuery);
+	}
+	
+	/***
+	 * Check password credentials
+	 * 
+	 * @param password
+	 * @param sqlQuery
+	 */
+	private boolean checkPasswordCredentials(String password, String sqlQuery) {
+		
 		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			 prepareStatement.setString(1, password);
+		    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+			prepareStatement.setString(1, password);
 			 
-			 try(ResultSet resultSet = prepareStatement.executeQuery();){
+			try (ResultSet resultSet = prepareStatement.executeQuery();) {
 			 
-			     while(resultSet.next()) {
-			         return true;
-			     }
-             }
-		} catch(Exception e) {
-			throw new MailIdNotFoundException("User Password Not Found");
+			    while (resultSet.next()) {
+			        return true;
+			    }
+            }
+		} catch (SQLException exception) {
+			throw new ConnectionException("Connection Failed");
 		}
 		return false;
 	}
 	
     /**
-	 * insert Admin details in admin Table
+	 * Insert admin details in admin table
+	 * 
+	 * @param user
 	 */
 	public boolean adminSignUpInsert(final User user) {
-		final String sqlQuery = "Insert Into admin_table(name, email, password) values(?, ?, ?)";
+		final String sqlQuery = "Insert Into admin_table(name, email, password) values (?, ?, ?)";
+		
+		return insertSignUpDetails(sqlQuery, user);
+	}
+	
+	/**
+	 * Insert user details into user table
+	 * 
+	 * @param user
+	 */
+	public boolean userSignUpInsert(final User user) {
+		final String sqlQuery = "Insert Into user_table(name, email, password) values (?, ?, ?)";
+		
+		return insertSignUpDetails(sqlQuery, user);
+	}
+	
+	/**
+	 * Insert signup details in to database
+	 * 
+	 * @param sqlQuery
+	 * @param user
+	 */
+	private boolean insertSignUpDetails(String sqlQuery, User user) {
 		
 		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			
+		    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+				
 			prepareStatement.setString(1, user.getName());
 			prepareStatement.setString(2, user.getEmail());
 			prepareStatement.setString(3, user.getPassword());
 			
 			prepareStatement.executeUpdate();
 			return true;
-		} catch (Exception exception) {
-			
+		} catch (SQLException exception) {
+			throw new ConnectionException("Connection Failed");
 		}
-		return false;
-	}
-	
-	/**
-	 * insert user details into user table
-	 */
-	public boolean userSignUpInsert(final User user) {
-		final String sqlQuery = "Insert Into user_table(name, email, password) values(?, ?, ?)";
-		
-		try (Connection connection = DataBaseConnection.getConnection();
-		        PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			
-			 prepareStatement.setString(1, user.getName());
-			 prepareStatement.setString(2, user.getEmail());
-			 prepareStatement.setString(3, user.getPassword());
-		   
-			prepareStatement.executeUpdate();
-			return true;
-		} catch (Exception exception) {
-			System.out.println(exception);
-		}
-		return false;
 	}
 
 	/**
 	 * Insert firstRound into firstRoundTable
+	 * 
+	 * @param quizTools
 	 */
 	public boolean firstRoundInsert(final Quiz quizTools) {
-	    final String sqlQuery = "insert into first_round_table values(?, ?, ?, ?, ?, ?, ?)";
-	   
-	    boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
+	    final String sqlQuery = "Insert Into first_round_table values (?, ?, ?, ?, ?, ?, ?)";
+	    final boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
+	    
 	    return isInserted;
 	}
 	
 	/**
 	 * Insert secondRound into secondRoundTable
+	 * 
+	 * @param quizTools
 	 */
 	public boolean secondRoundInsert(final Quiz quizTools) {
-	    final String sqlQuery = "insert into second_round_table values(?, ?, ?, ?, ?, ?, ?)";
+	    final String sqlQuery = "Insert Into second_round_table values(?, ?, ?, ?, ?, ?, ?)";
+	    final boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
 	    
-	    boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
 	    return isInserted;
 	}
 	
 	/**
-	 * insert thirdRound into thirdRoundTable
+	 * Insert thirdRound into thirdRoundTable
+	 * 
+	 * @param quizTools
 	 */
     public boolean thirdRoundInsert(final Quiz quizTools) {
-	    final String sqlQuery = "insert into third_round_table values(?, ?, ?, ?, ?, ?, ?)";
+	    final String sqlQuery = "Insert Into third_round_table values(?, ?, ?, ?, ?, ?, ?)";
+	    final boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
 	    
-	    boolean isInserted = QuizDaoImplements. prepareStatementForInsertTable(sqlQuery, quizTools);
 	    return isInserted;
 	}
 	
     /**
-     * execute query using prepareStatement
+     * Execute query using prepareStatement
+     * 
+     * @param Sqlquery
+     * @param quizTools
      */
 	public static boolean prepareStatementForInsertTable(final String sqlQuery, final Quiz quizTools) {
 		
 		try (Connection connection = DataBaseConnection.getConnection();
-		        PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+		    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
 			
 			prepareStatement.setInt(1, quizTools.getQuestionNumber());
 			prepareStatement.setString(2, quizTools.getQuestions());
@@ -201,110 +214,109 @@ public class QuizDaoImplements {
 			prepareStatement.executeUpdate();
 			
 			return true;
-		} catch (Exception exception) {
-			System.out.println(exception);
+		} catch (SQLException exception) {
+			throw new ConnectionException("Connection Failed");
 		}
-		return false;
 	}
 	
 	/**
-	 * check first round Question Number
+	 * Check first round question number
+	 * 
+	 * @param questionNumber
 	 */
-	public  boolean checkFirstRoundQuestionNumber(int questionNumber) {
+	public boolean checkFirstRoundQuestionNumber(int questionNumber) {
 		final String sqlQuery = "select question_number from first_round_table where question_number = ?";
-
-		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			    prepareStatement.setInt(1, questionNumber);
-			 
-			 try(ResultSet resultSet = prepareStatement.executeQuery();){
-			 
-			     while(resultSet.next()) {
-			         return true;
-			     }
-             }
-		} catch(Exception e) {
-			throw new ConnectionException("DataBase Access Failed");
-		}
-		return false;
+        
+		return checkQuestionNumber(questionNumber, sqlQuery);
 	}
 	
 	/**
-	 * check second round Question Number
+	 * Check second round question number
+	 * 
+	 * @param questionNumber
 	 */
-	public  boolean checkSecondRoundQuestionNumber(int questionNumber) {
+	public boolean checkSecondRoundQuestionNumber(int questionNumber) {
 		final String sqlQuery = "select question_number from second_round_table where question_number = ?";
-
-		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			    prepareStatement.setInt(1, questionNumber);
-			 
-			 try(ResultSet resultSet = prepareStatement.executeQuery();){
-			 
-			     while(resultSet.next()) {
-			         return true;
-			     }
-             }
-		} catch(Exception e) {
-			throw new ConnectionException("DataBase Access Failed");
-		}
-		return false;
+		
+		return checkQuestionNumber(questionNumber, sqlQuery);
 	}
 	
 	/**
-	 * check third round Question Number
+	 * Check third round question number
+	 * 
+	 * @param questionNumber
 	 */
 	public  boolean checkThirdRoundQuestionNumber(int questionNumber) {
 		final String sqlQuery = "select question_number from third_round_table where question_number = ?";
+		
+		return checkQuestionNumber(questionNumber, sqlQuery);
+	}
 
+	/**
+	 * Check question number from database
+	 * 
+	 * @param questionNumber
+	 * @param sqlQuery
+	 */
+	private boolean checkQuestionNumber(int questionNumber, String sqlQuery) {
+		
 		try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-			    prepareStatement.setInt(1, questionNumber);
-			 
-			 try(ResultSet resultSet = prepareStatement.executeQuery();){
-			 
-			     while(resultSet.next()) {
-			         return true;
-			     }
-             }
-		} catch(Exception e) {
-			throw new ConnectionException("DataBase Access Failed");
+			PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+		    prepareStatement.setInt(1, questionNumber);
+				 
+		    try (ResultSet resultSet = prepareStatement.executeQuery();){
+				 
+			    while (resultSet.next()) {
+			        return true;
+			    }
+	        }
+		} catch(SQLException exception) {
+			throw new ConnectionException("Connection Failed");
 		}
 		return false;
 	}
 	
 	/**
-	 * update firstRound into firstRoundTable
+	 * Update firstRound into firstRoundTable
+	 * 
+	 * @param quizTools
 	 */
     public boolean firstRoundUpdate(final Quiz quizTools) {
 		final String sqlQuery = "Update first_round_table SET questions = ?, first_option = ?, second_option = ?, third_option = ?, fourth_option = ?, correct_answer = ? WHERE question_number = ?";
-		
 		boolean isUpdated = QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
+		
 		return isUpdated;
 	}
 	
     /**
-     * update secondRound into secondRoundTable
+     * Update secondRound into secondRoundTable
+     * 
+     * @param quizTools
      */
     public boolean secondRoundUpdate(final Quiz quizTools) {
 		final String sqlQuery = "Update second_round_table SET questions = ?, first_option = ?, second_option = ?, third_option = ?, fourth_option = ?, correct_answer = ? WHERE question_number = ?";
-		
 		boolean isUpdated = QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
+		
 		return isUpdated;
 	}
     
     /**
-     * update thirdRound into thirdRoundTable
+     * Update thirdRound into thirdRoundTable
+     * 
+     * @parma quizTools
      */
     public boolean thirdRoundUpdate(final Quiz quizTools) {
 		final String sqlQuery = "Update third_round_table SET questions = ?, first_option = ?, second_option = ?, third_option = ?, fourth_option = ?, correct_answer = ? WHERE question_number = ?";
-		
 		boolean isUpdated = QuizDaoImplements.prepareStatementForUpdateTable(sqlQuery, quizTools);
+		
 		return isUpdated;
 	}
     
     /**
-     * execute query using prepareStatament
+     * Execute query using prepareStatament
+     * 
+     * @param sqlQuery
+     * @parma quizTools
      */
 	public static boolean prepareStatementForUpdateTable(final String sqlQuery, final Quiz quizTools) {
 		
@@ -321,124 +333,129 @@ public class QuizDaoImplements {
 			
 			prepareStatement.executeUpdate();
 			return true;
-		} catch (Exception exception) {
-			throw new ConnectionException("DataBase Access Failed");
+		} catch (SQLException exception) {
+			throw new ConnectionException("Connection Failed");
 		}
 	}
 	
 	/**
-	 * delete firstRound from firstRoundTable
+	 * Delete firstRound from firstRoundTable
+	 * 
+	 * @param questionNumber
 	 */
 	public boolean firstRoundDelete(final int questionNumber) {
 		final String sqlQuery = "Delete from first_round_table where question_number = ?";
-		
 		boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
 		
 		return isDelete;
 	}
 	
 	/**
-	 * delete secondRound from secondRoundTable
+	 * Delete secondRound from secondRoundTable
+	 * 
+	 * @param questionNumber
 	 */
     public boolean secondRoundDelete(final int questionNumber) {
     	final String sqlQuery = "Delete from second_round_table where question_number = ?";
-		
-    	boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
+		boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
     	
     	return isDelete;
 	}
     
     /**
-     * delete thirdRound from thirdRoundTable
+     * Delete thirdRound from thirdRoundTable
+     * 
+     * @param questionNumber
      */
     public boolean thirdRoundDelete(final int questionNumber) {
     	final String sqlQuery = "Delete from third_round_table where question_number = ?";
-		
-    	boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
+		boolean isDelete = QuizDaoImplements.prepareStatementForDeleteTable(sqlQuery, questionNumber);
     	
     	return isDelete;
 	}
     
     /**
-     * execute query using PrepareStatament
+     * Execute query using PrepareStatament
+     * 
+     * @param sqlQuery
+     * @param qurstionNumber
      */
-    private static boolean prepareStatementForDeleteTable(final String sqlQuery, int questionNumber) {
+    private static boolean prepareStatementForDeleteTable(final String sqlQuery, final int questionNumber) {
 		
     	try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prePareStatement = connection.prepareStatement(sqlQuery);) {
+			PreparedStatement prePareStatement = connection.prepareStatement(sqlQuery);) {
     		
     		prePareStatement.setInt(1, questionNumber);
     		prePareStatement.executeUpdate();
     		
     		return true;
-		} catch(Exception e) {
-			throw new ConnectionException("DataBase Access Failed");
+		} catch (SQLException exception) {
+			throw new ConnectionException("Connection Failed");
 		}
 	}
     
     /**
-     * get FirstRoundDetails 
-     * 
-     * @throws AccessFailedException 
+     * Get firstRoundDetails 
      */
     public List<Quiz> getFirstRoundDetails() {
     	
     	try (Connection connection = DataBaseConnection.getConnection();
-    		    Statement statement = connection.createStatement();) {
-    		String sqlQuery = "select * from first_round_table";
+    		Statement statement = connection.createStatement();) {
+    		String sqlQuery = "select question_number, questions, first_option,second_option, third_option, fourth_option, correct_answer from first_round_table";
     		List<Quiz> firstRoundDetails = QuizDaoImplements.getDetails(sqlQuery);
     		
     		return firstRoundDetails;
-    	} catch(Exception exception) {
-    		throw new AccessFailedException("DataBase AccessFailed");
+    	} catch (SQLException exception) {
+    		throw new ConnectionException("Connection Failed");
     	}
     }
 
     /**
-     * get secondRoundDetails
+     * Get secondRoundDetails
      */
     public List<Quiz> getSecondRoundDetails() {
 		
     	try (Connection connection = DataBaseConnection.getConnection();
-        	    Statement statement = connection.createStatement();) {
-        	String sqlQuery = "select * from second_round_table";
+        	Statement statement = connection.createStatement();) {
+        	String sqlQuery = "select question_number, questions, first_option,second_option, third_option, fourth_option, correct_answer from second_round_table";
        		List<Quiz> secondRoundDetails = QuizDaoImplements.getDetails(sqlQuery);
         		
        		return secondRoundDetails;
-       	} catch(Exception e) {
-       		throw new AccessFailedException("DataBase AccessFailed");
+       	} catch (SQLException exception) {
+       		throw new ConnectionException("Connection Failed");
         }
 	}
     
     /**
-     * get ThirdRoundDetails
+     * Get thirdRoundDetails
      */
     public List<Quiz> getThirdRoundDetails() {
 		
     	try (Connection connection = DataBaseConnection.getConnection();
-        	    Statement statement = connection.createStatement();) {
-       		String sqlQuery = "select * from third_round_table";
+        	Statement statement = connection.createStatement();) {
+       		String sqlQuery = "select question_number, questions, first_option,second_option, third_option, fourth_option, correct_answer from third_round_table";
        		List<Quiz> thirdRoundDetails = QuizDaoImplements.getDetails(sqlQuery);
         		
        		return thirdRoundDetails;
-       	} catch(Exception e) {
-       		throw new AccessFailedException("DataBase AccessFailed");	
+       	} catch (SQLException exception) {
+       		throw new ConnectionException("Connection Failed");	
         }
 	}
 
     /**
-     * get questions,options and correctAnswer from dataBase
+     * Get questions,options and correctAnswer from dataBase
      * 
+     * @param sqlQuery
      */
-	public static List<Quiz> getDetails(String sqlQuery) {
+	public static List<Quiz> getDetails(final String sqlQuery) {
 		
 		try (Connection connection = DataBaseConnection.getConnection();
-			    Statement statement = connection.createStatement();
-			    ResultSet resultSet = statement.executeQuery(sqlQuery);) {		
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlQuery);) {		
 			List<Quiz> questionDetails = new ArrayList<Quiz>();
 			
 			while (resultSet.next()) {
-				Quiz questionAnswer = new Quiz();
+				final Quiz questionAnswer = new Quiz();
 				
 				questionAnswer.setQuestionNumber(resultSet.getInt(1));
 				questionAnswer.setQuestions(resultSet.getString(2));
@@ -451,26 +468,29 @@ public class QuizDaoImplements {
 				questionDetails.add(questionAnswer);
 			}
 			return questionDetails;
-		} catch(Exception e) {
-			throw new AccessFailedException("DataBase AccessFailed");	
+		} catch (SQLException exception) {
+			throw new ConnectionException("Connection Failed");
 		}
 	}
 
 	/**
-	 * mark Insert into dataBase
+	 * Mark insert into dataBase
+	 * 
+	 * @param score
+	 * @param email
 	 */
 	public boolean markInsert(final int score, final String email) {
 		final String sqlQuery = "Update user_table SET score = ? where email = ?";
 		
         try (Connection connection = DataBaseConnection.getConnection();
-			    PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
-             prepareStatement.setInt(1, score);
-             prepareStatement.setString(2, email);
+			PreparedStatement prepareStatement = connection.prepareStatement(sqlQuery);) {
+            prepareStatement.setInt(1, score);
+            prepareStatement.setString(2, email);
             
-             prepareStatement.executeUpdate();
-             return true;
-        } catch (Exception e) {
-        	throw new ConnectionException("DataBase Access Failed");
+            prepareStatement.executeUpdate();
+            return true;
+        } catch (SQLException exception) {
+        	throw new ConnectionException("Connection Failed");
         }
 	}
 }

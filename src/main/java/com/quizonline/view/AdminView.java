@@ -7,7 +7,7 @@ import com.quizonline.main.OnlineQuizTool;
 import com.quizonline.model.Quiz;
 
 /**
- * Admin View
+ * <h1> Admin View </h1>
  * 
  * @author PandiarajkumarG
  */
@@ -16,7 +16,9 @@ public class AdminView {
 	private static final Logger LOGGER = Logger.getLogger(AdminView.class); 
 	   
 	/**
-	 * validate New Admin or not.
+	 * Validate new admin or not.
+	 * 
+	 * @param choice
 	 */
 	public static void admin(final int choice) {
 		LOGGER.info("Are you new Admin (yes / no) ?");
@@ -27,21 +29,20 @@ public class AdminView {
 		} else if ("no".equalsIgnoreCase(isNewAdmin)) {
 			QuizDetail.signIn(choice);
 		} else {
-			System.out.println("Pls Enter Yes or No only");
+			System.out.println("Enter Yes or No only");
 			admin(choice);
 		}
     }
 	
 	/**
-	 * which makes use of all services such as Insert, Update and Delete.
+	 * Which makes use of all services such as Insert, Update and Delete.
 	 * 
 	 */
 	public static void adminServices() {
-		int choice = 0;
 		LOGGER.info("1.Insert \n2.Update \n3.Delete \nEnter Your Choice");
     
 	    try {
-	    	choice = Integer.parseInt(QuizDetail.getChoice());
+	    	int choice = Integer.parseInt(QuizDetail.getChoice());
 		    
 	        if(choice == 1) {
 	    	    AdminView.insertQuestion(choice);
@@ -60,11 +61,13 @@ public class AdminView {
 	}
 	
 	/**
-	 * insert Question
+	 * Question insert
+	 * 
+	 * @param choice
 	 */
 	private static void insertQuestion(int choice) {
 		final int questionNumber = QuizDetail.getQuestionNumber(choice);
-		boolean isQuestionNumber = QuizController.checkQuestionNumber(choice, questionNumber);
+		final boolean isQuestionNumber = QuizController.checkQuestionNumber(choice, questionNumber);
 		
 		if (!isQuestionNumber && choice == 1) {
 			AdminView.insertQuestions(choice, questionNumber);
@@ -82,11 +85,12 @@ public class AdminView {
 	}
 	
 	/**
-	 * insert in the question into database 
+	 * Insert in the question into database 
+	 * 
+	 * @param choice
+	 * @param questionNumber
 	 */
     public static boolean insertQuestions(final int choice, int questionNumber) {
-    	boolean isInsert = true;
-	
 		final String questions = QuizDetail.getQuestions();
 		final String firstOption = QuizDetail.getFirstOption();
 		final String secondOption = QuizDetail.getSecondOption();
@@ -94,25 +98,24 @@ public class AdminView {
 		final String fourthOption = QuizDetail.getFourthOption();
 		final String correctAnswer = QuizDetail.getCorrectAnswer();
 		final Quiz QuizTools = new Quiz(questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption, correctAnswer);
-		
-		isInsert = QuizController.questionInsert(choice, QuizTools);
+		final boolean isInserted = QuizController.questionInsert(choice, QuizTools);
 		    
-		if (isInsert && choice == 1) {
+		if (isInserted && choice == 1) {
 	        LOGGER.info("Successfully Inserted");
-			AdminView.isContinue();
-	    } else if (!isInsert && choice == 1){
-			LOGGER.info("Inserted failed");
-			AdminView.isContinue();
+			getIsContinue();
+	    } else if (!isInserted && choice == 1){
+			LOGGER.info("Insertion failed");
+			getIsContinue();
 		} 
-		return isInsert;
+		return isInserted;
     }
     
     /**
-     * continue or not 
+     * Continue or not 
      */
-	private static void isContinue() {
+	private static void getIsContinue() {
 		LOGGER.info("Do you Want to continue ? (Yes /No)");
-		String isContinue =  OnlineQuizTool.SCANNER.nextLine().trim();
+		final String isContinue =  OnlineQuizTool.SCANNER.nextLine().trim();
 		
 		if ("yes".equalsIgnoreCase(isContinue)) {
 			adminServices();
@@ -122,32 +125,32 @@ public class AdminView {
 	}
 
 	/**
-     * update in the question into database
+     * Update in the question into database
      */
 	public static void updateQuestion(final int choice, int questionNumber) {
-	    boolean isUpdate= AdminView.insertQuestions(choice, questionNumber);
+	    final boolean isUpdated = AdminView.insertQuestions(choice, questionNumber);
 	    
-	    if (isUpdate) {
+	    if (isUpdated) {
 	    	LOGGER.info("Successfully updated");
-	    	AdminView.isContinue();
+	    	getIsContinue();
 	    } else {
 	    	LOGGER.error("updated Failed");
-	    	AdminView.isContinue();
+	    	getIsContinue();
 	    }
 	}
 	
 	/**
-	 * delete in the question into database 
+	 * Delete in the question into database 
 	 */
 	public static void deleteQuestion(int choice, int questionNumber) {
-		boolean isQuestion = QuizController.questionDelete(questionNumber);
+		final boolean isQuestionPresent = QuizController.questionDelete(questionNumber);
 		
-		if (isQuestion) {
+		if (isQuestionPresent) {
 			LOGGER.info("Successfully deleted");
-			AdminView.isContinue();
+			getIsContinue();
 		} else {
 			LOGGER.error("Deleted Failed");
-			AdminView.isContinue();
+			getIsContinue();
 		}
 	}
 }

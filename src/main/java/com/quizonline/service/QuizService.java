@@ -1,9 +1,14 @@
 package com.quizonline.service;
 
+/**
+ * <h1> Quiz Service </h1>
+ * @author PandiarajkumarG
+ *
+ */
 public interface QuizService {
-    boolean checkName(final String name);
+    boolean validateName(final String name);
     
-    boolean checkEmail(final String email);
+    boolean validateEmail(final String email);
     
-    boolean checkPassword(final String password);
+    boolean validatePassword(final String password);
 }

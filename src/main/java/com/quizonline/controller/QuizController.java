@@ -12,7 +12,7 @@ import com.quizonline.view.AdminView;
 import com.quizonline.view.UserView;
 
 /**
- * QuizController
+ * <h1> QuizController </h1>
  *  
  * <p> This Controller getting the request from the main and
  *     gives in to the service.
@@ -25,74 +25,181 @@ public class QuizController {
 	private static final QuizService QUIZ_SERVICE = new QuizServiceImplements();
     private static final QuizDaoService QUIZ_DAO_SERVICE = new QuizDaoServiceImplements();
    
-   	public static boolean checkName(final String name) {
-	   return QUIZ_SERVICE.checkName(name);
+    /**
+     * Validate the name of user and admin.
+     * 
+     * @param name
+     */
+   	public static boolean validateName(final String name) {
+	   return QUIZ_SERVICE.validateName(name);
 	}
 	
-   	public static boolean checkEmail(final String email) {
-		return QUIZ_SERVICE.checkEmail(email);
+   	/**
+   	 * Validate the email of user and admin
+   	 * 
+   	 * @param email
+   	 */
+   	public static boolean validateEmail(final String email) {
+		return QUIZ_SERVICE.validateEmail(email);
 	}
     
-	public static boolean checkPassword(final String password) {
-		return QUIZ_SERVICE.checkPassword(password);
+   	/**
+   	 * Validate the password of user and admin
+   	 * 
+   	 * @param password
+   	 * @return
+   	 */
+	public static boolean validatePassword(final String password) {
+		return QUIZ_SERVICE.validatePassword(password);
 	}
 	
+	/**
+	 * SignUp admin and user details
+	 * 
+	 * @param choice
+	 * @param user
+	 * @return
+	 */
 	public static boolean signUpInsert(final int choice, final User user) {
 		return QUIZ_DAO_SERVICE.signUpInsert(choice, user);
 	}
 	
+	/**
+	 * Checks the email of user and admin from database 
+	 * 
+	 * @param choice
+	 * @param email
+	 * @return
+	 */
 	public static boolean checkEmail(int choice, String email) {
 		return QUIZ_DAO_SERVICE.checkEmail(choice, email);
 	}
 	
+	/**
+	 * Checks the password of user and admin from database
+	 * 
+	 * @param choice
+	 * @param password
+	 * @return
+	 */
 	public static boolean checkPassword(int choice, String password) {
 		return QUIZ_DAO_SERVICE.checkPassword(choice, password);
 	}
 	
+	/**
+	 * Provides service to admin as insert, update, delete questions from database
+	 */
 	public static void adminServices() {
 		AdminView.adminServices();
 	}
 	
+	/**
+	 * Questions insert, update into databse
+	 * 
+	 * @param choice
+	 * @param QuizTools
+	 * @return
+	 */
 	public static boolean questionInsert(final int choice, final Quiz QuizTools) {
 		return QUIZ_DAO_SERVICE.questionInsert(choice, QuizTools);
 	}
 	
+	/**
+	 * Questions delete from databse
+	 * 
+	 * @param questionNumber
+	 * @return
+	 */
 	public static boolean questionDelete(final int questionNumber) {
 		return QUIZ_DAO_SERVICE.questionDelete(questionNumber);
 	}
 
+	/**
+	 * Provides quiz level to the user by getting emailid
+	 *  
+	 * @param email
+	 */
 	public static void userServices(final String email) {
 		UserView.userServices(email);
 	}
 
+	/**
+	 * All level questions get from the database
+	 * 
+	 * @param level
+	 * @return
+	 */
 	public static List<Quiz> getRoundDetails(int level) {
 		return QUIZ_DAO_SERVICE.getRoundDetails(level);
 	}
 
+	/**
+	 * User mark insert in to database
+	 * 
+	 * @param mark
+	 * @param email
+	 * @return
+	 */
 	public static boolean markInsert(int mark, final String email) {
 		return QUIZ_DAO_SERVICE.markInsert(mark, email);
 	}
 
+	/**
+	 * Check the question number
+	 * @param choice
+	 * @param questionNumber
+	 * @return
+	 */
 	public static boolean checkQuestionNumber(int choice, int questionNumber) {
 		return QUIZ_DAO_SERVICE.checkQuestionNumber(choice, questionNumber);
 	}
 
+	/**
+	 * checks the correct answer
+	 * 
+	 * @param correctAnswer
+	 * @return
+	 */
 	public static boolean checkCorrectAnswer(String correctAnswer) {
 		return QUIZ_DAO_SERVICE.checkAnswer(correctAnswer);
 	}
 
+	/**
+	 * Checks the first option 
+	 * 
+	 * @param firstOption
+	 * @return
+	 */
 	public static boolean checkFirstOption(String firstOption) {
 		return QUIZ_DAO_SERVICE.checkFirstOption(firstOption);
 	}
 	
+	/**
+	 * Checks the second option
+	 * 
+	 * @param secondOption
+	 * @return
+	 */
 	public static boolean checkSecondOption(String secondOption) {
 		return QUIZ_DAO_SERVICE.checkSecondOption(secondOption);
 	}
 	
+	/**
+	 * Checks the third option
+	 * 
+	 * @param thirdOption
+	 * @return
+	 */
 	public static boolean checkThirdOption(String thirdOption) {
 		return QUIZ_DAO_SERVICE.checkThirdOption(thirdOption);
 	}
 	
+	/**
+	 * Checks the fourth option
+	 * 
+	 * @param fourthOption
+	 * @return
+	 */
 	public static boolean checkFourthOption(String fourthOption) {
 		return QUIZ_DAO_SERVICE.checkFourthOption(fourthOption);
 	}

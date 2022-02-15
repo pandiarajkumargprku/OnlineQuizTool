@@ -14,7 +14,7 @@ import com.quizonline.view.QuizDetail;
 import com.quizonline.view.UserView;
 
 /**
- *OnlineQuizTool
+ * <h1> OnlineQuizTool </h1>
  * 
  * <p>
  *    The onlineQuizTool Application in which admin
@@ -31,21 +31,21 @@ public class OnlineQuizTool {
    
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		final Properties properties = new Properties();
+		
 		properties.load(new FileInputStream("log4j.properties"));
 		PropertyConfigurator.configure(properties);
-		System.out.println("Online Quiz Application");
-		OnlineQuizTool.checkAdminOrUser();
+		LOGGER.info("Online Quiz Application");
+		checkAdminOrUser();
 	}
 	
 	/**
-	 * check admin or user.
+	 * Check admin or user.
 	 */
-	private static void checkAdminOrUser() {
+	public static void checkAdminOrUser() {
 	    LOGGER.info("Choose 1.Admin 2.User");
-		int choice = 0;
 		
 		try {
-			choice = Integer.parseInt(QuizDetail.getChoice());
+			int choice = Integer.parseInt(QuizDetail.getChoice());
 		   
 			switch (choice) {
 	        case 1:
@@ -55,11 +55,11 @@ public class OnlineQuizTool {
 		        UserView.user(choice);
 		        break;
 	        default:
-		        LOGGER.error("Enter valid number [1-2] ");
+		        LOGGER.error("Enter valid number [1-2]");
 		        checkAdminOrUser();
 	        }
-		} catch(NumberFormatException ex) {
-			LOGGER.error("Pls Re-Enter only number");
+		} catch(NumberFormatException exception) {
+			LOGGER.error("Re-Enter valid choice");
 			checkAdminOrUser();
 		}
 	}		

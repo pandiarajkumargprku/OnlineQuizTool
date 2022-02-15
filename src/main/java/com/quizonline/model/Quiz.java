@@ -80,7 +80,6 @@ public class Quiz {
 		this.correctAnswer = correctAnswer;
 	}
 
-	@Override
 	public String toString() {	
 		return String.format("%s.%s\n%s\n%s\n%s\n%s", questionNumber, questions, firstOption, secondOption, thirdOption, fourthOption);
 	}

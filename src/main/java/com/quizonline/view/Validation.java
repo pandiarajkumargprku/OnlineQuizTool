@@ -1,9 +1,7 @@
 package com.quizonline.view;
 
-import com.quizonline.controller.QuizController;
-
 /**
- *mark validation 
+ * <h1> Mark validation </h1>
  * 
  * @author PandiarajkumarG
  *
@@ -11,14 +9,14 @@ import com.quizonline.controller.QuizController;
 public class Validation {
 
 	/**
-	 * validate Mark
+	 * Validate Mark
+	 * 
+	 * @param mark
+	 * @param answer
+	 * @param correctAnswer
 	 */
 	public static int markCalculation(int mark, String answer, String correctAnswer) {
-		boolean isAnswerValid = QuizController.checkCorrectAnswer(correctAnswer);
 		
-		if(!isAnswerValid) {
-		    System.out.println("Please Enter Correct option [a,b,c or d]");
-		} 
 		if (correctAnswer.equalsIgnoreCase(answer)) {
 			mark = mark+2;
 		} else {
@@ -28,11 +26,14 @@ public class Validation {
 	}
 	
 	/**
-	 * check mark pass or fail 
+	 * Check mark pass or fail 
+	 * 
+	 * @param mark
+	 * @param email
 	 */
 	public static boolean checkMark(int mark, final String email) {
 		
-		if (mark<=6) {
+		if (mark <= 6) {
 			UserView.markInsert(mark, email);
 		} else {
 			return true;

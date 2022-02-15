@@ -9,7 +9,7 @@ import com.quizonline.main.OnlineQuizTool;
 import com.quizonline.model.Quiz;
 
 /**
- *User View
+ * <h1> User View </h1>
  * 
  * @author PandiarajkumarG
  *
@@ -19,7 +19,9 @@ public class UserView {
 	private static final Logger LOGGER = Logger.getLogger(UserView.class);
 	
 	/**
-	 * User Validation
+	 * User validation
+	 * 
+	 * @param choice
 	 */
 	public static void user(final int choice) {
 	    LOGGER.info("Are you new User ? (yes /no)");
@@ -29,16 +31,18 @@ public class UserView {
 			QuizDetail.signUp(choice);
 		} else if ("no".equalsIgnoreCase(isNewUser)) {
 			QuizDetail.signIn(choice);
-		}else {
-			LOGGER.info("Pls Enter Yes or No only");
+		} else {
+			LOGGER.info("Enter Yes or No only");
 			user(choice);
 		}
 	}
 	
 	/**
-	 * user services
+	 * User services
+	 * 
+	 * @param email
 	 */
-	public static void userServices(String email) {
+	public static void userServices(final String email) {
 		int mark = 0;
 		int level = 1;
 
@@ -46,7 +50,11 @@ public class UserView {
 	}
 	
 	/**
-	 *questions,options and correctAnswer get from dataBase
+	 * Level details 
+	 * 
+	 * @param mark
+	 * @param level
+	 * @param email
 	 */
 	public static void levelDetails(int mark, int level, final String email) {
 		int lastLevel = 3;
@@ -60,11 +68,10 @@ public class UserView {
 		
 		List<Quiz> details = QuizController.getRoundDetails(level);
 		
-		for(int index = 0;index<details.size();index++) {
+		for (int index = 0;index<details.size();index++) {
 		    Quiz questionAnswer = details.get(index);
 		    LOGGER.info(questionAnswer);
-		    LOGGER.info("Enter Answer");
-		    String answer = OnlineQuizTool.SCANNER.next();
+		    String answer = QuizDetail.getCorrectAnswer();
             mark = Validation.markCalculation(mark, answer, questionAnswer.getCorrectAnswer());
         }
 		System.out.println("Your Score is" + mark);
@@ -72,26 +79,46 @@ public class UserView {
 	    
 		if (!isPass) {
 			LOGGER.info("your score is below average");
+			LOGGER.info("Do you Want to COntinue");
+			getIsContinue();
 		} else if (isPass) {
 			level = level+1;
-			if(level <= lastLevel) {
+			if (level <= lastLevel) {
 				levelDetails(mark, level, email);
 			} else {
 				markInsert(mark, email);
 			}
 		} 
 	}
+	
+	/**
+	 * Continue or not
+	 * 
+	 */
+	private static void getIsContinue() {
+		LOGGER.info("Do You Want to continue");
+		String isContinue = OnlineQuizTool.SCANNER.nextLine();
+		
+		if ("yes".equalsIgnoreCase(isContinue)) {
+			OnlineQuizTool.checkAdminOrUser();
+		} else if ("no".equalsIgnoreCase(isContinue)) {
+			LOGGER.info("...");
+		}
+	}
 
 	/**
-	 *  mark insert into DataBase
+	 *  Mark insert into dataBase
+	 *  
+	 *  @param mark
+	 *  @param email
 	 */
 	public static void markInsert(int mark, final String email) {
-		boolean isMarkUpdate = QuizController.markInsert(mark, email);
+		boolean isMarkUpdated = QuizController.markInsert(mark, email);
 		
-		if (isMarkUpdate) {
-			System.out.println("Your mark was Updated Successfully");
+		if (isMarkUpdated) {
+			LOGGER.info("Your mark was Updated Successfully");
 		} else {
-			System.out.println("Check your EMail");
+			LOGGER.info("Check your EMail");
 		}
 	}
 }
